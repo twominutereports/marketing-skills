@@ -10,15 +10,15 @@ A Claude skill that generates a full-funnel view of your site's organic performa
 - [Two Minute Reports](https://twominutereports.com) MCP connected in Claude Settings
 - The relevant data source (Google Analytics, Search Console, etc.) linked within Two Minute Reports
 
-**Installing a Skill**
-
-![Installing a skill in Claude](./assets/claude-install-skill.gif)
+**Installing a skill in Claude**
 
 1. Download the `.md` skill file from the skill's folder in this repository
 2. Go to [claude.ai/customize/skills](https://claude.ai/customize/skills)
 3. Click the **+** icon → **Create skill** → **Upload a skill**
 4. Select the downloaded `skill.md` file
 5. Start chatting — each skill's README lists the trigger phrases you can use
+
+<img width="1245" height="770" alt="Image" src="https://github.com/user-attachments/assets/127aaee5-42cb-439a-abdd-60363fec27b9" />
 
 ## Usage
 
@@ -28,15 +28,15 @@ Claude will query your connected GSC and GA4 properties and produce the full rep
 
 ## What It Covers
 
-| Section | What You Get |
-| --- | --- |
-| Executive Summary | Impressions, clicks, CTR, avg position (GSC) + sessions, users, key events, bounce rate (GA4) |
-| Top Landing Pages | Top 5 pages by clicks, by sessions, and by key events |
-| Month-over-Month Performance | Best and worst performing landing pages by session growth vs the prior month |
-| Keyword Performers | Top impression and click gainers and losers across the last two full calendar months |
-| Search Visibility Trends | Weekly impressions and clicks chart over the last 13 weeks |
-| AI Traffic Breakdown | Sessions, users, bounce rate, and key events from ChatGPT, Gemini, Claude, Perplexity, and others |
-| Recommended Action | One concrete, data-backed next step the marketer can act on this week |
+| Section                      | What You Get                                                                                      |
+| ---------------------------- | ------------------------------------------------------------------------------------------------- |
+| Executive Summary            | Impressions, clicks, CTR, avg position (GSC) + sessions, users, key events, bounce rate (GA4)     |
+| Top Landing Pages            | Top 5 pages by clicks, by sessions, and by key events                                             |
+| Month-over-Month Performance | Best and worst performing landing pages by session growth vs the prior month                      |
+| Keyword Performers           | Top impression and click gainers and losers across the last two full calendar months              |
+| Search Visibility Trends     | Weekly impressions and clicks chart over the last 13 weeks                                        |
+| AI Traffic Breakdown         | Sessions, users, bounce rate, and key events from ChatGPT, Gemini, Claude, Perplexity, and others |
+| Recommended Action           | One concrete, data-backed next step the marketer can act on this week                             |
 
 ---
 

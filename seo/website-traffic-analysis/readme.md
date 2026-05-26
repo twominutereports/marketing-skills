@@ -10,15 +10,15 @@ A Claude skill that acts as your personal SEO specialist. Connect it to your web
 - [Two Minute Reports](https://twominutereports.com) MCP connected in Claude Settings
 - The relevant data source (Google Analytics, Search Console, etc.) linked within Two Minute Reports
 
-**Installing a Skill**
-
-![Installing a skill in Claude](./assets/claude-install-skill.gif)
+**Installing a skill in Claude**
 
 1. Download the `.md` skill file from the skill's folder in this repository
 2. Go to [claude.ai/customize/skills](https://claude.ai/customize/skills)
 3. Click the **+** icon → **Create skill** → **Upload a skill**
 4. Select the downloaded `skill.md` file
 5. Start chatting — each skill's README lists the trigger phrases you can use
+
+<img width="1245" height="770" alt="Image" src="https://github.com/user-attachments/assets/127aaee5-42cb-439a-abdd-60363fec27b9" />
 
 ## Usage
 
