@@ -17,7 +17,7 @@ A Claude skill that acts as your personal SEO specialist. Connect it to your web
 1. Download the `.md` skill file from the skill's folder in this repository
 2. Go to [claude.ai/customize/skills](https://claude.ai/customize/skills)
 3. Click the **+** icon → **Create skill** → **Upload a skill**
-4. Select the downloaded `.md` file
+4. Select the downloaded `skill.md` file
 5. Start chatting — each skill's README lists the trigger phrases you can use
 
 ## Usage

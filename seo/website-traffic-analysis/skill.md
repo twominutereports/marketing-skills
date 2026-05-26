@@ -1,5 +1,5 @@
 ---
-name: website-traffic-growth-analyst
+name: tmr-website-traffic-growth-analyst
 description: 'A professional SEO and website traffic growth analyst skill that automatically connects to Google Analytics and Google Search Console data via Two Minute Reports MCP. Use this skill whenever the user wants to analyse their website traffic, find SEO opportunities, diagnose traffic drops, check technical health, find keyword cannibalization, audit on-page SEO, understand visitor engagement, or get a monthly action plan. Trigger this skill for any request involving: website traffic analysis, SEO audit, keyword research, traffic growth, Google Analytics data, Google Search Console data, CTR problems, bounce rate analysis, content gaps, traffic sources, keyword cannibalization, technical SEO, on-page SEO review, or any request to "analyse my website", "check my SEO", "why is my traffic dropping", or "how do I grow my traffic". Always use this skill proactively — do not wait for the user to ask for each section. Pull the data and deliver the full analysis automatically.'
 ---
 
