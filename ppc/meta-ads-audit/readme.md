@@ -18,8 +18,6 @@ A Claude skill that acts as your senior Meta Ads performance consultant. Connect
 4. Select the downloaded `skill.md` file
 5. Start chatting — each skill's README lists the trigger phrases you can use
 
-<img width="1245" height="770" alt="Image" src="https://github.com/user-attachments/assets/127aaee5-42cb-439a-abdd-60363fec27b9" />
-
 ## Usage
 
 Just say: `Audit my Meta Ads` or `Review my Facebook campaigns` or `Check for creative fatigue`

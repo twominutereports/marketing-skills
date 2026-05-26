@@ -6,11 +6,27 @@ This repository is a curated collection of Claude skills built for marketers. Ea
 
 ## Available Skills
 
-| Skill                                                   | Description                                                                                       |
-| ------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| [Website Traffic Analysis](./website-traffic-analysis/) | Automated SEO specialist — traffic trends, CTR diagnostics, keyword gaps, and 30-day action plans |
+### SEO
 
-More skills are in progress. This repository will grow to cover the full marketing stack.
+| Skill | Description |
+| --- | --- |
+| [Website Traffic Analysis](./seo/website-traffic-analysis/) | Traffic trends, CTR diagnostics, keyword gaps, and a 30-day action plan |
+| [SEO + Analytics Report](./seo/seo-analytics-report/) | Full-funnel organic report combining GSC and GA4 — visibility, top pages, MoM shifts, and AI traffic |
+| [Content Decay Detector](./seo/content-decay-detector/) | Finds pages silently losing traffic, scores severity, and diagnoses the root cause |
+
+### PPC
+
+| Skill | Description |
+| --- | --- |
+| [Google Ads Auditor](./ppc/google-ads-audit/) | Campaign, keyword, and search terms audit with wasted spend breakdown |
+| [Meta Ads Auditor](./ppc/meta-ads-audit/) | Campaign, creative, audience, and placement audit including creative fatigue detection |
+| [Reddit Ads Auditor](./ppc/reddit-ads-audit/) | Full Reddit Ads audit across campaigns, ad groups, creatives, audiences, and scaling opportunities |
+
+### Ecommerce
+
+| Skill | Description |
+| --- | --- |
+| [Shopify Store Auditor](./ecommerce/shopify-store-audit/) | CRO audit across funnel, checkout, mobile, products, and traffic sources with a revenue-impact action plan |
 
 ## Key Capabilities (across all skills)
 
@@ -35,14 +51,20 @@ More skills are in progress. This repository will grow to cover the full marketi
 4. Select the downloaded `skill.md` file
 5. Start chatting — each skill's README lists the trigger phrases you can use
 
-<img width="1245" height="770" alt="Image" src="https://github.com/user-attachments/assets/127aaee5-42cb-439a-abdd-60363fec27b9" />
-
 ## Repository Structure
 
 ```
 marketing-skills/
-├── website-traffic-analysis/   # SEO & web traffic skill
-└── ...                         # More skills coming soon
+├── seo/
+│   ├── website-traffic-analysis/   # Traffic trends, CTR diagnostics, 30-day action plan
+│   ├── seo-analytics-report/       # Full-funnel GSC + GA4 report with AI traffic breakdown
+│   └── content-decay-detector/     # Severity-scored decay detection with root cause diagnosis
+├── ppc/
+│   ├── google-ads-audit/           # Campaign, keyword, and wasted spend audit
+│   ├── meta-ads-audit/             # Creative, audience, and placement audit
+│   └── reddit-ads-audit/           # Full Reddit Ads audit with scaling opportunities
+└── ecommerce/
+    └── shopify-store-audit/        # CRO audit across funnel, products, and traffic sources
 ```
 
 📄 [Privacy Policy](https://twominutereports.com/privacy-policy) · 🔒 [Data Security](https://twominutereports.com/data-security) · 📋 [Terms of Service](https://twominutereports.com/terms-of-service)
