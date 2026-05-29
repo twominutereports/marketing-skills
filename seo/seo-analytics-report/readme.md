@@ -1,4 +1,4 @@
-# SEO + Analytics Performance Report — Claude Skill
+# SEO Report Generator - Claude Skill
 
 A Claude skill that generates a full-funnel view of your site's organic performance. It combines Google Search Console and GA4 data to cover everything from search visibility and top landing pages to month-over-month shifts and AI referral traffic — delivered as an inline insights summary and a complete HTML dashboard artifact.
 
