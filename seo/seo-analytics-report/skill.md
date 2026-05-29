@@ -1,11 +1,10 @@
 ---
-name: tmr-seo-analytics-report
+name: tmr-seo-report-generator
 description: Use this skill when the user asks to generate an SEO report, run an SEO + analytics performance report, check search console and GA4 performance, create a client SEO report, or analyze organic search visibility combined with website analytics. Covers Google Search Console metrics (impressions, clicks, CTR, average position, top pages by clicks, weekly search trends) and GA4 metrics (sessions, users, key events, bounce rate, top landing pages by sessions and key events, month-over-month landing page performance, and AI traffic from known AI referrers). Produces an inline insights summary plus a full HTML dashboard artifact.
 version: 1.0.0
 ---
 
-# SEO + Analytics Performance Report
-
+# SEO Report Generator
 ## Purpose
 
 Generate a comprehensive SEO + Analytics Performance Report by combining Google Search Console (GSC) and GA4 data. The report gives marketers and agency teams a full-funnel view of their site's organic performance — from search visibility to on-site behavior to conversions — including AI traffic as an emerging channel.
