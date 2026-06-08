@@ -20,6 +20,8 @@ This repository is a curated collection of Claude skills built for marketers. Ea
 | --- | --- |
 | [Google Ads Auditor](./ppc/google-ads-audit/) | Campaign, keyword, and search terms audit with wasted spend breakdown |
 | [Meta Ads Auditor](./ppc/meta-ads-audit/) | Campaign, creative, audience, and placement audit including creative fatigue detection |
+| [TikTok Ads Auditor](./ppc/tiktok-ads-audit/) | Campaign, creative, and audience audit with creative fatigue signals |
+| [LinkedIn Ads Auditor](./ppc/linkedin-ads-audit/) | B2B-focused audit across campaigns, creatives, and audiences with CPL and lead quality analysis |
 | [Reddit Ads Auditor](./ppc/reddit-ads-audit/) | Full Reddit Ads audit across campaigns, ad groups, creatives, audiences, and scaling opportunities |
 
 ### Ecommerce
@@ -62,6 +64,8 @@ marketing-skills/
 ├── ppc/
 │   ├── google-ads-audit/           # Campaign, keyword, and wasted spend audit
 │   ├── meta-ads-audit/             # Creative, audience, and placement audit
+│   ├── tiktok-ads-audit/           # Campaign, creative, and audience audit with fatigue signals
+│   ├── linkedin-ads-audit/         # B2B audit with CPL and lead quality analysis
 │   └── reddit-ads-audit/           # Full Reddit Ads audit with scaling opportunities
 └── ecommerce/
     └── shopify-store-audit/        # CRO audit across funnel, products, and traffic sources
