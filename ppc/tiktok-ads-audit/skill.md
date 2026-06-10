@@ -1,5 +1,5 @@
 ---
-name: tiktok-ads-audit
+name: tmr-tiktok-ads-audit
 description: >
   Runs a comprehensive TikTok Ads account audit using live data from Two Minute Reports (TMR) MCP.
   Trigger this skill whenever the user says anything like: "audit my TikTok Ads", "review my TikTok campaigns",
@@ -28,17 +28,22 @@ The final output is a **single self-contained HTML file** rendered as an artifac
 Follow these steps in order.
 
 ### Step 1: Verify TMR Connection
+
 Call `verify_team_details()` to confirm TMR is active. Greet the user briefly and let them know you're connecting.
 
 ### Step 2: List Connectors
+
 Call `list_connectors()` and find the **TikTok Ads** connector. If absent:
+
 > "I don't see a TikTok Ads connector in your Two Minute Reports account. Please connect it at app.twominutereports.com, then come back — I'll be ready."
 
 Do not proceed without a TikTok Ads connector.
 
 ### Step 3: Get Ad Accounts
+
 Call `get_ad_accounts(["TikTok Ads"])` using the exact connector name from Step 2.
 Present the accounts and ask:
+
 > "Which TikTok Ads account(s) should I audit? And what date range — Last 7 days, Last 14 days, Last 30 days, or custom?"
 
 Wait for their response.
@@ -48,6 +53,7 @@ Wait for their response.
 Run these queries sequentially using `generate_query()` + `get_data_insights()`. Ask for user confirmation once (before the first query), then proceed through all fetches. Inform the user you're pulling multiple data layers.
 
 **Query A — Campaign Performance**
+
 ```
 Campaign-level metrics: campaign name, campaign objective, status, budget, spend,
 impressions, clicks, CTR, CPC, conversions, conversion rate, CPA, ROAS (if available),
@@ -56,6 +62,7 @@ Date range: [user's range]. Include both current period AND same-length previous
 ```
 
 **Query B — Ad Group (Ad Set) Performance**
+
 ```
 Ad group-level metrics: ad group name, campaign, targeting summary (age, gender, interests, placements),
 status, budget, spend, impressions, clicks, CTR, CPC, conversions, CPA, ROAS (if available), frequency.
@@ -63,6 +70,7 @@ Date range: [user's range].
 ```
 
 **Query C — Creative (Ad) Performance**
+
 ```
 Ad-level metrics: ad name, ad group, campaign, ad format (TopView, In-Feed, Spark Ads, etc.),
 spend, impressions, clicks, CTR, CPC, conversions, conversion rate, CPA, video views (if available),
@@ -71,12 +79,14 @@ Date range: [user's range].
 ```
 
 **Query D — Audience & Demographics**
+
 ```
 Demographic breakdown: age group, gender, spend, impressions, clicks, CTR, conversions, CPA.
 Date range: [user's range].
 ```
 
 **Query E — Placement Performance**
+
 ```
 Placement breakdown: placement type (TikTok feed, TopView, Brand Takeover, Pangle, etc.),
 spend, impressions, clicks, CTR, CPC, conversions, CPA.
@@ -84,6 +94,7 @@ Date range: [user's range].
 ```
 
 **Query F — Device & Geographic Performance**
+
 ```
 Device breakdown: device type (iOS, Android, desktop), spend, clicks, impressions, CTR, conversions, CPA.
 Geographic breakdown: country or region, spend, clicks, impressions, CTR, conversions, CPA. Top 20 by spend.
@@ -101,13 +112,17 @@ Process all fetched data through these 6 audit modules. Each module produces bot
 Read `references/thresholds.md` for scoring benchmarks.
 
 ### Module 1: Executive Summary (no score — snapshot)
+
 Compute account-wide totals for the selected period:
+
 - Total spend, total conversions, CPA, ROAS (if available), CTR, CPM, frequency, video view rate (if available)
 - Period-over-period delta for each metric (▲ or ▼ with %)
 - One-sentence account health insight (e.g., "CPM rising 31% while CTR held flat signals audience saturation — creative refresh is overdue.")
 
 ### Module 2: Wasted Spend Analysis (Score /20)
+
 Identify budget going nowhere. Flag and quantify:
+
 - Campaigns/ad groups with **spend > threshold and 0 conversions** in the period → 🔴
 - Ads with **spend > avg CPA and 0 conversions** → 🔴
 - High frequency + declining CTR combos (frequency > 3.0 and CTR dropping vs prior period) → 🟡 (creative fatigue signal)
@@ -117,7 +132,9 @@ Identify budget going nowhere. Flag and quantify:
 Compute: **Estimated wasted spend = sum of spend on 0-conversion campaigns/ad groups/ads** above threshold. Surface this prominently.
 
 ### Module 3: Campaign Performance Ranking (Score /20)
+
 Rank all active campaigns:
+
 - **Top performers**: highest ROAS or lowest CPA with meaningful spend
 - **Worst performers**: highest CPA or lowest ROAS with significant spend
 - Flag: scale winners (ROAS > 3× account avg) → 🟢
@@ -126,8 +143,10 @@ Rank all active campaigns:
 - Note: TikTok's algorithm needs time to exit the Learning Phase — flag campaigns with <50 conversions if CPA looks high
 
 ### Module 4: Creative Audit (Score /20)
+
 TikTok is a **creative-first platform** — this module carries extra weight.
 Evaluate creative health:
+
 - Top 3 performing ads by CTR and conversion rate (scale signals)
 - Worst 3 ads by CPA with material spend → pause candidates
 - **Creative fatigue detection**: ads with frequency > 2.5 + CTR decline > 20% vs previous period → 🔴 (refresh urgently)
@@ -136,7 +155,9 @@ Evaluate creative health:
 - Creative diversity: < 3 active ads per ad group → 🟡 (TikTok recommends 3–5 for algorithm learning)
 
 ### Module 5: Audience & Budget Allocation (Score /20)
+
 Examine targeting and budget distribution:
+
 - What % of total spend is concentrated in each campaign/ad group?
 - Overlapping audiences across ad groups (same interest layers in multiple ad groups) → 🟡
 - Age/gender segments with CPA > 2× account avg eating > 10% of spend → 🔴
@@ -144,15 +165,19 @@ Examine targeting and budget distribution:
 - Broad vs narrow targeting balance: over-restriction limits TikTok's algorithmic delivery → 🟡 if audience too narrow
 
 ### Module 6: Action Plan (no score — synthesis)
+
 Consolidate findings into a prioritized action plan. Every item must be specific — name the campaign, ad group, or ad creative.
 
 **High Priority (this week):**
+
 - Specific pauses, budget shifts, or creative kills with estimated $ impact
 
 **Medium Priority (this month):**
+
 - Bid adjustments, audience refinements, creative format tests
 
 **Growth Opportunities:**
+
 - Where to invest more, which formats to expand, new audience segments to test
 
 ---
@@ -162,7 +187,9 @@ Consolidate findings into a prioritized action plan. Every item must be specific
 Generate a **single self-contained HTML file** as an artifact. This is the primary deliverable. Do not produce a plain-text report.
 
 ### Design principles
+
 Follow the exact visual language from `references/html_template.md`:
+
 - Dark gradient header banner (navy/dark slate) with account name + period + health score badge
 - Color system: 🔴 `#e53e3e`, 🟡 `#d69e2e`, 🟢 `#38a169`, neutral `#2d3748`
 - Font: Inter (via Google Fonts)

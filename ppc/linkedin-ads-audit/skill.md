@@ -1,5 +1,5 @@
 ---
-name: linkedin-ads-audit
+name: tmr-linkedin-ads-audit
 description: >
   Runs a comprehensive LinkedIn Ads account audit using live data from Two Minute Reports (TMR) MCP.
   Trigger this skill whenever the user says anything like: "audit my LinkedIn Ads", "review my LinkedIn campaigns",
@@ -31,17 +31,22 @@ LinkedIn is a B2B platform — keep commentary tuned to B2B realities: higher CP
 Follow these steps in order.
 
 ### Step 1: Verify TMR Connection
+
 Call `verify_team_details()` to confirm TMR is active. Greet the user briefly and let them know you're connecting.
 
 ### Step 2: List Connectors
+
 Call `list_connectors()` and find the **LinkedIn Ads** connector. If absent:
+
 > "I don't see a LinkedIn Ads connector in your Two Minute Reports account. Please connect it at app.twominutereports.com, then come back — I'll be ready."
 
 Do not proceed without a LinkedIn Ads connector.
 
 ### Step 3: Get Ad Accounts
+
 Call `get_ad_accounts(["LinkedIn Ads"])` using the exact connector name from Step 2.
 Present the accounts and ask:
+
 > "Which LinkedIn Ads account(s) should I audit? And what date range — Last 7 days, Last 14 days, Last 30 days, or custom?"
 
 Wait for their response.
@@ -51,6 +56,7 @@ Wait for their response.
 Run these queries sequentially using `generate_query()` + `get_data_insights()`. Ask for user confirmation once (before the first query), then proceed through all fetches. Inform the user you're pulling multiple data layers.
 
 **Query A — Campaign Performance**
+
 ```
 Campaign-level metrics: campaign name, campaign objective (Lead Gen, Website Conversions, Brand Awareness, etc.),
 campaign type, status, spend, impressions, clicks, CTR, CPC, leads (if available),
@@ -60,6 +66,7 @@ Date range: [user's range]. Include both current period AND same-length previous
 ```
 
 **Query B — Creative (Ad) Performance**
+
 ```
 Ad-level metrics: ad name, campaign, ad format (Single Image, Carousel, Video, Document, Message Ad,
 Conversation Ad, Text Ad, Spotlight Ad), spend, impressions, clicks, CTR, CPC,
@@ -69,6 +76,7 @@ Date range: [user's range].
 ```
 
 **Query C — Audience & Demographic Breakdown**
+
 ```
 Demographic breakdown: job function, seniority, industry, company size, job title (where available).
 For each segment: spend, impressions, clicks, CTR, leads/conversions, CPL/CPA.
@@ -76,18 +84,21 @@ Date range: [user's range].
 ```
 
 **Query D — Geographic Performance**
+
 ```
 Geographic breakdown: country or region. Spend, impressions, clicks, CTR, leads/conversions, CPL/CPA.
 Date range: [user's range]. Top 20 by spend.
 ```
 
 **Query E — Device Performance**
+
 ```
 Device breakdown: desktop vs mobile. Spend, impressions, clicks, CTR, leads/conversions, CPL/CPA.
 Date range: [user's range].
 ```
 
 **Query F — Ad Format Performance**
+
 ```
 Aggregate by ad format type: Sponsored Content (Single Image, Carousel, Video, Document),
 Message Ads, Conversation Ads, Text Ads, Dynamic Ads.
@@ -106,13 +117,17 @@ Process all fetched data through these 6 audit modules. Each module produces bot
 Read `references/thresholds.md` for scoring benchmarks.
 
 ### Module 1: Executive Summary (no score — snapshot)
+
 Compute account-wide totals for the selected period:
+
 - Total spend, total leads/conversions, CPL/CPA, CTR, CPC, frequency (if available), lead form completion rate (if available)
 - Period-over-period delta for each metric (▲ or ▼ with %)
 - One-sentence account health insight tuned to B2B (e.g., "CPL rose 34% while lead form completion held flat — likely creative fatigue or audience saturation, not funnel leakage.")
 
 ### Module 2: Wasted Spend Analysis (Score /20)
+
 Identify budget going nowhere. Flag and quantify:
+
 - Campaigns with **spend > $200 and 0 leads** (Lead Gen objective) → 🔴
 - Campaigns with **spend > $500 and 0 conversions** (Awareness/Traffic objective) → 🔴
 - Ads with frequency > 4.0 AND CTR declining > 20% vs prior period (creative fatigue) → 🔴
@@ -123,7 +138,9 @@ Identify budget going nowhere. Flag and quantify:
 Compute: **Estimated wasted spend = sum of spend on 0-conversion campaigns/ads above threshold + high-frequency declining ads**. Surface this prominently.
 
 ### Module 3: Campaign Performance Ranking (Score /20)
+
 Rank all active campaigns:
+
 - **Top performers**: lowest CPL or highest lead volume with good CTR
 - **Worst performers**: highest CPL with significant spend; flag if objective mismatch
 - Flag: scale winners (CPL ≤ 0.6× account avg, CTR ≥ 0.60%) → 🟢
@@ -132,7 +149,9 @@ Rank all active campaigns:
 - Note: LinkedIn's auction algorithm needs time — campaigns with <30 leads may show volatile CPL
 
 ### Module 4: Creative Audit (Score /20)
+
 LinkedIn is a **feed-first platform** — creative quality drives everything.
+
 - Top 3 performing ads by CTR and CPL (scale signals)
 - Worst 3 ads by CPL with material spend → pause candidates
 - **Creative fatigue detection**: frequency > 3.5 + CTR decline > 20% vs prior period → 🔴 (refresh urgently)
@@ -142,7 +161,9 @@ LinkedIn is a **feed-first platform** — creative quality drives everything.
 - Creative diversity: < 2 active ads per campaign → 🔴 (LinkedIn recommends 2–4 for rotation)
 
 ### Module 5: Audience & Budget Allocation (Score /20)
+
 Examine targeting and budget distribution:
+
 - What % of total spend is concentrated in each campaign/audience segment?
 - Audience size flags: < 50,000 (too narrow, delivery will suffer) → 🟡; > 5M for B2B (too broad, likely wasted CPCs) → 🟡
 - Top-spending demographic segments with CPL > 2× account avg → 🔴
@@ -151,15 +172,19 @@ Examine targeting and budget distribution:
 - Company size targeting: if absent on Enterprise-focused campaigns → 🟡
 
 ### Module 6: Action Plan (no score — synthesis)
+
 Consolidate findings into a prioritized action plan. Every item must be specific — name the campaign, creative, or audience.
 
 **High Priority (this week):**
+
 - Specific pauses, budget shifts, or creative kills with estimated $ impact
 
 **Medium Priority (this month):**
+
 - Bid adjustments, audience refinements, creative format tests, form optimizations
 
 **Growth Opportunities:**
+
 - Where to invest more, which formats to expand, new audience segments to test
 
 ---
@@ -173,7 +198,9 @@ Generate a **single self-contained HTML file** saved to `/mnt/user-data/outputs/
 After saving, call `present_files(["/mnt/user-data/outputs/{filename}.html"])` to surface it in the sidetab.
 
 ### Design principles
+
 Follow the exact visual language from `references/html_template.md`:
+
 - Dark navy gradient header banner with account name + period + health score badge
 - Report type label: **"LINKEDIN ADS AUDIT REPORT"** (small caps, above account name)
 - Color system: 🔴 `#e53e3e`, 🟡 `#d69e2e`, 🟢 `#38a169`, LinkedIn blue `#0077b5`
