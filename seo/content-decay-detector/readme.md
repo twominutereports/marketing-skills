@@ -12,7 +12,7 @@ A Claude skill that identifies pages on your website that are silently losing tr
 
 **Installing a skill in Claude**
 
-1. Download the `.md` skill file from the skill's folder in this repository
+1. Download all files in the skill's folder from this repository (skill.md plus any queries.json and references/)
 2. Go to [claude.ai/customize/skills](https://claude.ai/customize/skills)
 3. Click the **+** icon → **Create skill** → **Upload a skill**
 4. Select the downloaded `skill.md` file

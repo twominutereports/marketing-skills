@@ -1,0 +1,84 @@
+{
+  "notes": "Structured query templates for the SEO + Analytics Performance Report, migrated from the legacy generate_query/get_data_insights flow to the current TMR MCP. Two connectors: gsc (site URL account IDs) and ga4 (numeric property IDs). Field IDs are raw. Dates NOT stored — runtime resolves from today's date: 90-day window for Q1-Q4/Q6/Q7; the two most recent FULL calendar months for Q5 (GA4 MoM) and Q8a/Q8b (GSC page MoM). No currency (this report has no monetary metrics). AI-referrer filtering for Q7 is done in synthesis (pull all session sources, then keep chatgpt.com / gemini.google.com / claude.ai / perplexity.ai / copilot.com / notebooklm.google.com). All queries validated clean against live gsc + ga4 accounts. GSC data lags ~2-3 days.",
+  "connectors": {
+    "gsc": {
+      "connectorId": "gsc",
+      "account_id_format": "site URL, e.g. https://example.com/",
+      "queries": [
+        {
+          "key": "q1_gsc_totals",
+          "title": "GSC Totals (90d)",
+          "dimensions": [],
+          "metrics": ["clicks", "impressions", "ctr", "position"],
+          "window": "last_90_days"
+        },
+        {
+          "key": "q3_gsc_pages",
+          "title": "GSC Pages (90d)",
+          "dimensions": ["page"],
+          "metrics": ["clicks", "impressions", "ctr", "position"],
+          "window": "last_90_days",
+          "synthesis": "take top 5 by clicks"
+        },
+        {
+          "key": "q6_gsc_weekly",
+          "title": "GSC Weekly Impressions & Clicks (90d)",
+          "dimensions": ["week_start_date"],
+          "metrics": ["impressions", "clicks"],
+          "window": "last_90_days"
+        },
+        {
+          "key": "q8a_gsc_pages_month1",
+          "title": "GSC Pages — Month 1",
+          "dimensions": ["page"],
+          "metrics": ["impressions", "clicks"],
+          "window": "first_of_last_two_full_calendar_months"
+        },
+        {
+          "key": "q8b_gsc_pages_month2",
+          "title": "GSC Pages — Month 2",
+          "dimensions": ["page"],
+          "metrics": ["impressions", "clicks"],
+          "window": "second_of_last_two_full_calendar_months"
+        }
+      ]
+    },
+    "ga4": {
+      "connectorId": "ga4",
+      "account_id_format": "numeric GA4 property ID",
+      "queries": [
+        {
+          "key": "q2_ga4_totals",
+          "title": "GA4 Totals (90d)",
+          "dimensions": [],
+          "metrics": ["sessions", "total_users", "key_events", "bounce_rate"],
+          "window": "last_90_days"
+        },
+        {
+          "key": "q4_ga4_landing_pages",
+          "title": "GA4 Landing Pages (90d)",
+          "dimensions": ["landing_page"],
+          "metrics": ["sessions", "key_events"],
+          "window": "last_90_days",
+          "synthesis": "take top 5 by sessions and top 5 by key events"
+        },
+        {
+          "key": "q5_ga4_landing_x_month",
+          "title": "GA4 Landing Page x Month (last 2 full months)",
+          "dimensions": ["landing_page", "month_name"],
+          "metrics": ["sessions"],
+          "window": "last_two_full_calendar_months",
+          "synthesis": "month-over-month per page; best = top 5 by session increase, worst = top 5 by decrease; exclude (not set)"
+        },
+        {
+          "key": "q7_ga4_session_source",
+          "title": "GA4 Session Source (90d)",
+          "dimensions": ["session_source"],
+          "metrics": ["sessions", "total_users", "new_users", "bounce_rate", "key_events"],
+          "window": "last_90_days",
+          "synthesis": "filter to known AI referrers: chatgpt.com, gemini.google.com, claude.ai, perplexity.ai, copilot.com, notebooklm.google.com (allow /referral suffix). If none present, report AI traffic as zero."
+        }
+      ]
+    }
+  }
+}

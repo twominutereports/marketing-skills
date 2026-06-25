@@ -1,6 +1,6 @@
-# TikTok Ads Auditor — Claude Skill
+# Instagram Insights Reporter — Claude Skill
 
-A Claude skill that acts as your senior TikTok Ads performance consultant. Connect it to your TikTok Ads account via Two Minute Reports and get a full audit across campaigns, ad groups, creatives, and audiences — including creative fatigue signals — delivered as a scored HTML report with a prioritised action plan.
+A Claude skill that acts as your senior organic social-media strategist. Connect it to your Instagram account via Two Minute Reports and get a full organic performance report across account growth, reach, engagement, posts, Reels, and audience — delivered as a rich HTML report with visual scorecards, a growth trend chart, and a prioritised action plan.
 
 ## Requirements & Setup
 
@@ -8,7 +8,7 @@ A Claude skill that acts as your senior TikTok Ads performance consultant. Conne
 
 - Claude.ai Pro, Team, or Enterprise account
 - [Two Minute Reports](https://twominutereports.com) MCP connected in Claude Settings
-- The relevant data source (TikTok Ads, etc.) linked within Two Minute Reports
+- The relevant data source (Instagram Insights, etc.) linked within Two Minute Reports
 
 **Installing a skill in Claude**
 
@@ -20,20 +20,21 @@ A Claude skill that acts as your senior TikTok Ads performance consultant. Conne
 
 ## Usage
 
-Just say: `Audit my TikTok Ads` or `Review my TikTok campaigns` or `Find wasted spend in TikTok Ads`
+Just say: `Audit my Instagram` or `Instagram performance report` or `Which posts perform best`
 
-Claude will pull your live TikTok Ads data and deliver the full audit automatically — no file uploads or manual data entry.
+Claude will pull your live Instagram Insights data and deliver the full report automatically — no file uploads or manual data entry.
 
 ## What It Covers
 
 | Section | What You Get |
 | --- | --- |
-| Executive Summary | Spend, impressions, clicks, CTR, CPC, conversions, CPA, and ROAS snapshot |
-| Wasted Spend Analysis | Budget going to underperforming campaigns, ad groups, and creatives |
-| Campaign Performance Ranking | All campaigns ranked by ROAS, CPA, and conversion volume |
-| Creative Audit | Top and bottom creatives by CTR, conversion rate, and creative fatigue signals |
-| Audience & Budget Allocation | Whether spend is weighted toward your best-performing audiences and segments |
-| Prioritised Action Plan | Ranked fixes ordered by impact — the highest-leverage changes first |
+| Executive Summary | Followers, reach, profile views, net growth, and engagement snapshot with period-over-period deltas |
+| Growth & Reach Trend | Weekly new followers, unfollowers, reach, and profile views charted over the period |
+| Engagement Analysis | Engagement rate by reach and by followers, plus likes, comments, saves, and shares |
+| Post / Media Performance | Top posts ranked by engagement, with reach, views, and format breakdown |
+| Reels Performance | Reels interactions, shares, views, and reach vs feed performance |
+| Audience Breakdown | Follower age, gender, and top countries (current snapshot) |
+| Prioritised Action Plan | Ranked, tiered next steps ordered by impact — the highest-leverage changes first |
 
 ---
 

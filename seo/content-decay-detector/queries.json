@@ -1,0 +1,40 @@
+{
+  "notes": "Structured query templates for the Content Decay Detector, migrated from the legacy generate_query/get_data_insights flow to the current TMR MCP. Two connectors: gsc (site URL account IDs) and ga4 (numeric property IDs). Field IDs are raw. Dates NOT stored — runtime resolves the chosen comparison window (30/60/90 days, default 30) AND its immediately-preceding equal-length window; each query runs for BOTH so step 7 can compute period-over-period decay. No currency. ORGANIC-ONLY handling for the GA4 query: session_default_channel_grouping is included as a dimension so synthesis keeps only 'Organic Search' rows (avoids guessing connector-side filter syntax). Both queries validated clean against live gsc + ga4 accounts. GSC data lags ~2-3 days.",
+  "connectors": {
+    "gsc": {
+      "connectorId": "gsc",
+      "account_id_format": "site URL, e.g. https://example.com/",
+      "queries": [
+        {
+          "key": "gsc_page_decay",
+          "title": "GSC Page-Level Decay Signals",
+          "dimensions": ["page"],
+          "metrics": ["clicks", "impressions", "ctr", "position"],
+          "run_for": ["current_window", "previous_window"],
+          "result_alias": "GSC_DATA"
+        }
+      ]
+    },
+    "ga4": {
+      "connectorId": "ga4",
+      "account_id_format": "numeric GA4 property ID",
+      "queries": [
+        {
+          "key": "ga4_organic_decay",
+          "title": "GA4 Organic Session & Engagement Decay",
+          "dimensions": ["landing_page", "session_default_channel_grouping"],
+          "metrics": ["sessions", "engaged_sessions", "key_events"],
+          "run_for": ["current_window", "previous_window"],
+          "result_alias": "GA4_DATA",
+          "organic_filter": "Keep only rows where session_default_channel_grouping == 'Organic Search' during synthesis, then aggregate per landing_page."
+        }
+      ]
+    }
+  },
+  "decay_logic_reference": {
+    "candidate_threshold": "Flag if clicks_drop > 20% OR organic_sessions_drop > 20%; exclude if combined clicks in either period < 50",
+    "decay_score": "(click_drop% * 0.40) + (session_drop% * 0.30) + (impression_drop% * 0.20) + (position_decline% * 0.10), capped at 100",
+    "severity": "Critical >=60 or any metric >60% drop; High 40-59 or 40-60% drop; Medium 20-39 or 20-40% drop",
+    "root_cause_cases": "A Visibility Loss (impressions & clicks both down >15%); B SERP Issue (impressions stable, CTR down >15%); C Tracking Mismatch (GSC clicks stable, GA4 sessions down >20% - flag); D Engagement Decay (sessions stable, engaged sessions or key events down >25%); E Mixed/Unclear"
+  }
+}

@@ -1,0 +1,123 @@
+{
+  "notes": "Structured query templates for the Local SEO Audit, combining THREE Google sources: gmb (Google Business Profile), gsc (Search Console), ga4 (Analytics). Built against live schemas and validated. Field IDs are raw. Dates NOT stored — runtime resolves from today's date; compare_to_previous queries run twice (current + matching previous window). ACCOUNT ID SHAPES DIFFER: gmb = 'accountId-locationId'; gsc = site URL ('https://example.com/' or 'sc-domain:example.com'); ga4 = numeric property ID. GMB GROUP RULE (enforced by validate_query): search-impressions/search-terms metrics CANNOT combine with views/actions/reviews — they are separate queries. GMB monthly_search_impressions is monthly granularity; reviews totals are running snapshots. No ad spend in this audit (all organic/profile sources). Headline metric mapping: Profile Viewers=gmb views_total; Calls=gmb actions_phone; Impressions/Clicks=gsc impressions/clicks; Sessions/Engagement Rate=ga4 sessions/engagement_rate; Form Submissions/Key Events=ga4 key_events.",
+  "connectors": {
+    "gmb": {
+      "connectorId": "gmb",
+      "account_id_format": "accountId-locationId, e.g. 100662559256018796956-9223473798613636050",
+      "queries": [
+        {
+          "key": "gmb_overview",
+          "title": "Profile Views & Actions Totals",
+          "dimensions": [],
+          "metrics": ["views_maps", "views_search", "views_total", "actions_phone", "actions_website", "actions_driving_directions", "actions_messages", "actions_total"],
+          "compare_to_previous": true,
+          "note": "Profile Viewers (views_total) + Calls (actions_phone) + website/directions/messages. Period totals; run twice for PoP."
+        },
+        {
+          "key": "gmb_trend",
+          "title": "Weekly Profile Views & Actions Trend",
+          "dimensions": ["week_start_date"],
+          "metrics": ["views_total", "actions_total"],
+          "compare_to_previous": false
+        },
+        {
+          "key": "gmb_view_source",
+          "title": "How Customers Find the Profile (view source)",
+          "dimensions": ["view_source"],
+          "metrics": ["views_total"],
+          "compare_to_previous": false,
+          "note": "Maps vs Search, and discovery vs direct/branded. Single breakdown."
+        },
+        {
+          "key": "gmb_action_type",
+          "title": "Action Type Breakdown",
+          "dimensions": ["action_type"],
+          "metrics": ["actions_total"],
+          "compare_to_previous": false
+        },
+        {
+          "key": "gmb_search_terms",
+          "title": "Search Terms (how people search to find the profile)",
+          "dimensions": ["search_terms"],
+          "metrics": ["monthly_search_impressions"],
+          "compare_to_previous": false,
+          "row_limit": 25,
+          "sort": "monthly_search_impressions desc",
+          "isolation_rule": "search-impressions/search-terms group CANNOT combine with views/actions/reviews — keep separate."
+        },
+        {
+          "key": "gmb_reviews",
+          "title": "Reviews & Rating",
+          "dimensions": [],
+          "metrics": ["total_review_count", "total_review_star_rating"],
+          "compare_to_previous": false,
+          "note": "Running snapshot, not a period sum."
+        }
+      ]
+    },
+    "gsc": {
+      "connectorId": "gsc",
+      "account_id_format": "site URL, e.g. https://example.com/ or sc-domain:example.com",
+      "queries": [
+        {
+          "key": "gsc_totals",
+          "title": "Organic Search Totals",
+          "dimensions": [],
+          "metrics": ["clicks", "impressions", "ctr", "position"],
+          "compare_to_previous": true,
+          "note": "Impressions & Clicks headline. Run twice for PoP."
+        },
+        {
+          "key": "gsc_top_queries",
+          "title": "Top Search Queries",
+          "dimensions": ["query"],
+          "metrics": ["clicks", "impressions", "ctr", "position"],
+          "compare_to_previous": false,
+          "row_limit": 25,
+          "sort": "clicks desc",
+          "note": "Surface local-intent queries (city / 'near me' / service terms)."
+        },
+        {
+          "key": "gsc_top_pages",
+          "title": "Top Pages",
+          "dimensions": ["page"],
+          "metrics": ["clicks", "impressions", "ctr", "position"],
+          "compare_to_previous": false,
+          "row_limit": 10,
+          "sort": "clicks desc"
+        }
+      ]
+    },
+    "ga4": {
+      "connectorId": "ga4",
+      "account_id_format": "numeric GA4 property ID",
+      "queries": [
+        {
+          "key": "ga4_totals",
+          "title": "Website Sessions, Engagement & Key Events",
+          "dimensions": [],
+          "metrics": ["sessions", "total_users", "new_users", "engagement_rate", "key_events"],
+          "compare_to_previous": true,
+          "note": "Sessions, Engagement Rate, and Form Submissions (key_events). Run twice for PoP."
+        },
+        {
+          "key": "ga4_channels",
+          "title": "Traffic by Channel",
+          "dimensions": ["session_default_channel_grouping"],
+          "metrics": ["sessions", "key_events"],
+          "compare_to_previous": false,
+          "note": "Isolate Organic Search share and key events per channel."
+        },
+        {
+          "key": "ga4_landing_pages",
+          "title": "Top Landing Pages",
+          "dimensions": ["landing_page"],
+          "metrics": ["sessions", "engagement_rate", "key_events"],
+          "compare_to_previous": false,
+          "row_limit": 10,
+          "sort": "sessions desc"
+        }
+      ]
+    }
+  }
+}

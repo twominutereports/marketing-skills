@@ -1,0 +1,69 @@
+{
+  "connectorId": "fins",
+  "notes": "Structured query templates for the Facebook Insights (organic Page) report, built against the live Facebook Insights (fins) connector schema and validated clean against a live account. ORGANIC ONLY — no paid/spend metrics. Field IDs are raw. Dates NOT stored — runtime resolves from today's date; compare_to_previous queries run twice (current + matching previous window). FACEBOOK RULES (enforced by validate_query): (1) demographics (country, city) CANNOT combine with each other, nor with lifetime/post/video metric groups — each demographic is its own single-pivot query paired with a page_insights metric (e.g. page_posts_impressions_organic), NOT a lifetime metric like page_fan_count. (2) Page-insights, post-lifetime, and video-lifetime metric groups are separate report families — keep Page, Post, and Video/Reels as separate queries. DATA NOTES: lifetime metrics (page_followers_count/fan_count/talking_about/star_rating) are point-in-time snapshots; use page_daily_follows/page_daily_unfollows for period change. The connector exposes organic impressions (page_posts_impressions_organic), not a single unified reach figure. Shares are the highest-value (reach-expanding) interaction on Facebook.",
+  "queries": [
+    {
+      "key": "page_totals",
+      "title": "Page Insights Totals",
+      "dimensions": [],
+      "metrics": ["page_views_total", "page_total_actions", "page_post_engagements", "page_posts_impressions_organic", "page_daily_follows", "page_daily_unfollows", "page_video_views_organic", "page_reactions_like_total", "page_reactions_love_total", "page_reactions_wow_total", "page_reactions_haha_total", "page_reactions_sorry_total", "page_reactions_anger_total"],
+      "compare_to_previous": true,
+      "note": "Period totals — KPI dashboard, growth/engagement headline, reaction sentiment mix. Run twice for period-over-period."
+    },
+    {
+      "key": "lifetime_snapshot",
+      "title": "Lifetime Snapshot",
+      "dimensions": [],
+      "metrics": ["page_followers_count", "page_fan_count", "page_talking_about_count", "page_overall_star_rating", "page_rating_count"],
+      "compare_to_previous": false,
+      "note": "Point-in-time current totals (followers, fans, talking-about, star rating). Snapshot, not a period sum."
+    },
+    {
+      "key": "growth_trend",
+      "title": "Weekly Growth & Engagement Trend",
+      "dimensions": ["week_start_date"],
+      "metrics": ["page_daily_follows", "page_daily_unfollows", "page_post_engagements", "page_posts_impressions_organic", "page_views_total"],
+      "compare_to_previous": false,
+      "note": "Weekly trend for the growth/engagement chart. Use date for a daily line."
+    },
+    {
+      "key": "post_performance",
+      "title": "Post Performance",
+      "dimensions": ["post_message", "post_status_type", "post_permalink_url", "post_created_date"],
+      "metrics": ["post_likes", "post_reactions", "post_comments", "post_shares", "post_clicks", "post_link_clicks", "post_media_view"],
+      "compare_to_previous": false,
+      "row_limit": 30,
+      "sort": "post_reactions desc",
+      "note": "Per-post performance. post_status_type gives the format. Shares are the highest-value signal. Separate report family from page/video."
+    },
+    {
+      "key": "video_reels_performance",
+      "title": "Video / Reels Performance",
+      "dimensions": ["video_title", "video_type", "video_permalink_url"],
+      "metrics": ["total_video_views", "total_video_complete_views", "blue_reels_play_count", "reels_social_actions_shares", "reels_social_actions_comments", "reels_avg_time_watched"],
+      "compare_to_previous": false,
+      "sort": "total_video_views desc",
+      "note": "Video and Reels. blue_reels_play_count = Reels plays. Separate report family from page/post."
+    },
+    {
+      "key": "audience_country",
+      "title": "Audience — Country",
+      "dimensions": ["country"],
+      "metrics": ["page_posts_impressions_organic"],
+      "compare_to_previous": false,
+      "sort": "page_posts_impressions_organic desc",
+      "row_limit": 20,
+      "pivot_rule": "Single demographic pivot. Pair with a page_insights metric (organic impressions), NOT a lifetime metric. Cannot combine with city."
+    },
+    {
+      "key": "audience_city",
+      "title": "Audience — City",
+      "dimensions": ["city"],
+      "metrics": ["page_posts_impressions_organic"],
+      "compare_to_previous": false,
+      "sort": "page_posts_impressions_organic desc",
+      "row_limit": 20,
+      "pivot_rule": "Single demographic pivot. Cannot combine with country."
+    }
+  ]
+}

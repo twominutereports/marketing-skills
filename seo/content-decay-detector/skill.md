@@ -1,10 +1,13 @@
 ---
 name: tmr-content-decay-detector
 description: Use this skill when the user asks to detect content decay, find declining pages, audit SEO performance drops, identify pages losing organic traffic, run a content decay audit, check which blog posts or landing pages are losing clicks or sessions, or surface pages with falling rankings and engagement. Requires Google Search Console and Google Analytics 4. Produces a severity-scored decay report with root cause diagnosis (visibility loss, SERP issue, tracking mismatch, or engagement decay) plus an HTML dashboard artifact with a prioritized action table.
-version: 1.0.0
+version: 2.0.0
+compatibility: "Requires the current Two Minute Reports MCP (server https://mcp.twominutereports.com/mcp) connected with Google Search Console (gsc) and Google Analytics 4 (ga4) connectors"
 ---
 
 # Content Decay Detector
+
+> **MCP version note.** This skill targets the current TMR MCP. Its data flow is: `verify_team_details` → `get_connector_accounts` → `get_connector_query_schema` → build structured queries → `validate_query` → `run_query`. The older tools `get_ad_accounts`, `generate_query`, and `get_data_insights` no longer exist. Connector IDs: **`gsc`** (Search Console), **`ga4`** (Analytics). Field IDs are raw. The two natural-language prompts from the previous version are now structured queries (stored in `queries.json`, mirrored in step 6), each run for the current and previous window. Date ranges are computed fresh at runtime.
 
 ## Purpose
 
@@ -15,8 +18,8 @@ This is not a simple traffic comparison. The skill uses explicit decay logic: a 
 ## Connectors required
 
 This skill uses the following TMR connectors:
-- Google Search Console
-- Google Analytics 4
+- Google Search Console (`gsc`)
+- Google Analytics 4 (`ga4`)
 
 Both are mandatory. The skill will not proceed if either is unavailable. GSC reveals SEO visibility trends (ranking, impressions, CTR); GA4 reveals business impact (sessions, engagement, conversions). Together they enable real insight; neither alone is sufficient.
 
@@ -28,7 +31,7 @@ Follow these steps in order. Do not skip steps. Do not rearrange.
 
 ### 1. Check that TMR's tools are available
 
-Inspect your available tools. The Two Minute Reports MCP exposes these tool names: `verify_team_details`, `list_connectors`, `get_ad_accounts`, `generate_query`, `get_data_insights`. The prefix may vary — users name their MCP connections differently (e.g., "Two Minute Reports", "TMR", "TwoMinuteReports", or a custom name). Match by tool function and the Two Minute Reports MCP server (URL: `https://mcp.twominutereports.com/mcp`), not by exact prefix.
+Inspect your available tools. The current Two Minute Reports MCP exposes these tool names: `verify_team_details`, `list_connectors`, `get_connector_accounts`, `get_connector_query_schema`, `validate_query`, `run_query`. The prefix may vary — users name their MCP connections differently (e.g., "Two Minute Reports", "TMR", "TwoMinuteReports", or a custom name). Match by tool function and the Two Minute Reports MCP server (URL: `https://mcp.twominutereports.com/mcp`), not by exact prefix.
 
 **If none of these tools are present**, tell the user:
 
@@ -50,7 +53,9 @@ If the tools ARE present, hold the resolved prefix internally and continue.
 
 Call `verify_team_details`.
 
-- **Success** → note the team name, continue.
+- **Multiple teams** → present them, ask which to use, store the chosen `teamId` for all later calls.
+- **Single team success** → note the team name, store its `teamId`, continue.
+- **Plan status** → `active`, `in_trial`, `non_renewing` are fine. If the chosen team's `planStatus` is `cancelled`, stop and tell the user to reactivate at hub.twominutereports.com/billing — do not call `validate_query` or `run_query`.
 - **Auth / session failure or empty team** → tell the user:
 
   > *"Two Minute Reports is connected, but I couldn't verify your team — your session may have expired. Please reconnect Two Minute Reports, then run this skill again. Setup reference: https://twominutereports.com/help/mcp/claude"*
@@ -63,9 +68,11 @@ Call `verify_team_details`.
 
 ### 3. Verify both required connectors are provisioned in TMR
 
-Call `get_ad_accounts` with `selected_connectors: ["Google Search Console", "Google Analytics 4"]`.
+Call `get_connector_accounts` once per connector, with `teamId`:
+- `get_connector_accounts(teamId, connectorId: "gsc", status: "enabled")`
+- `get_connector_accounts(teamId, connectorId: "ga4", status: "enabled")`
 
-- **Both return accounts** → continue.
+- **Both return accounts** → continue. (GSC account IDs are site URLs like `https://example.com/`; GA4 account IDs are numeric property IDs.)
 - **Either is missing or empty** → tell the user which connector is missing and ask them to add it inside Two Minute Reports, then stop. Do not attempt a partial run.
 
 ---
@@ -86,7 +93,7 @@ Try to read `<install-path>/config.json`.
 - Use stored accounts and `auto_confirm_query`.
 
 **If `saved: false`, file missing, or unreadable:**
-- Reuse the `get_ad_accounts` response from step 3.
+- Reuse the `get_connector_accounts` responses from step 3.
 - Present accounts grouped by connector. Ask:
 
   > *"Which Google Search Console property and GA4 property would you like to analyse? Pick one each — ideally matching the same website."*
@@ -108,35 +115,24 @@ Use the chosen window for all queries. If the user says nothing or presses ahead
 
 ---
 
-### 6. Run the two data-collection prompts
+### 6. Build, validate, and run the two data-collection queries
 
-#### Prompt A — GSC page-level decay signals
+The previous version sent two natural-language prompts to `generate_query`; the new MCP has no such tool, so each pull is an explicit structured query. Resolve the chosen window (and its immediately-preceding equal-length window) from today's actual date, then run each query for **both** the current and previous window so the decay logic in step 7 can compute period-over-period deltas. GSC data lags ~2–3 days — consider ending the current window a couple of days before today.
 
-**Prompt text:**
-> For each landing page, show clicks, impressions, CTR, and average position for the last [WINDOW] days vs the previous [WINDOW] days, broken down by page URL.
+**Procedure:** assemble one `gsc` entry and one `ga4` entry → `validate_query(teamId, connectors:[...])` (fix any flagged field/rule and re-validate) → unless `auto_confirm_query` is `true`, show a one-line summary and wait for confirmation → `run_query(teamId, connectors:[...], limit:...)` (no `currencyCode` — no monetary metrics). If a result returns as a stored file path, parse it with code execution.
 
-a. Call `generate_query` with the user's selected GSC property and the prompt above (substituting the chosen window).
+#### Query A — GSC page-level decay signals (→ **GSC_DATA**)
+- connector `gsc`, account = selected site URL
+- dims: `page` · metrics: `clicks`, `impressions`, `ctr`, `position`
+- run once for the current window, once for the previous window
 
-b. Unless `auto_confirm_query` is `true`, present the query summary and wait for explicit user confirmation.
+#### Query B — GA4 organic session and engagement decay (→ **GA4_DATA**)
+- connector `ga4`, account = selected property ID
+- dims: `landing_page`, `session_default_channel_grouping` · metrics: `sessions`, `engaged_sessions`, `key_events`
+- run once for the current window, once for the previous window
+- **Organic-only handling:** the channel dimension is included so you can **keep only the `Organic Search` rows during synthesis** (step 7). This avoids guessing connector-side filter syntax and is robust. Aggregate organic sessions/engaged sessions/key events per `landing_page` from those rows.
 
-c. Call `get_data_insights` with `user_confirmed: "true"`.
-
-d. Hold the returned data as **GSC_DATA**.
-
----
-
-#### Prompt B — GA4 organic session and engagement decay
-
-**Prompt text:**
-> For each landing page, show organic sessions, engaged sessions, and key events for the last [WINDOW] days vs the previous [WINDOW] days, broken down by full page URL, filtered to organic traffic only.
-
-a. Call `generate_query` with the user's selected GA4 property and the prompt above.
-
-b. Unless `auto_confirm_query` is `true`, confirm with the user.
-
-c. Call `get_data_insights` with `user_confirmed: "true"`.
-
-d. Hold the returned data as **GA4_DATA**.
+> Hold both datasets (current + previous for each) for the decay logic in step 7.
 
 ---
 
@@ -271,7 +267,7 @@ If yes, write to `<install-path>/config.json`:
 
 ```json
 {
-  "version": "1.0.0",
+  "version": "2.0.0",
   "saved": true,
   "accounts": {
     "Google Search Console": [{ "label": "...", "value": "..." }],

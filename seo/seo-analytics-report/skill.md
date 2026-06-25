@@ -1,10 +1,14 @@
 ---
-name: tmr-seo-report-generator
+name: tmr-seo-analytics-report
 description: Use this skill when the user asks to generate an SEO report, run an SEO + analytics performance report, check search console and GA4 performance, create a client SEO report, or analyze organic search visibility combined with website analytics. Covers Google Search Console metrics (impressions, clicks, CTR, average position, top pages by clicks, weekly search trends) and GA4 metrics (sessions, users, key events, bounce rate, top landing pages by sessions and key events, month-over-month landing page performance, and AI traffic from known AI referrers). Produces an inline insights summary plus a full HTML dashboard artifact.
-version: 1.0.0
+version: 2.0.0
+compatibility: "Requires the current Two Minute Reports MCP (server https://mcp.twominutereports.com/mcp) connected with Google Search Console (gsc) and Google Analytics 4 (ga4) connectors"
 ---
 
-# SEO Report Generator
+# SEO + Analytics Performance Report
+
+> **MCP version note.** This skill targets the current TMR MCP. Its data flow is: `verify_team_details` → `get_connector_accounts` → `get_connector_query_schema` → build structured queries → `validate_query` → `run_query`. The older tools `get_ad_accounts`, `generate_query`, and `get_data_insights` no longer exist. Connector IDs: **`gsc`** (Search Console), **`ga4`** (Analytics). Field IDs are raw. The natural-language prompts from the previous version are now 9 validated structured queries (stored in `queries.json`, mirrored in step 5). Date ranges are computed fresh at runtime.
+
 ## Purpose
 
 Generate a comprehensive SEO + Analytics Performance Report by combining Google Search Console (GSC) and GA4 data. The report gives marketers and agency teams a full-funnel view of their site's organic performance — from search visibility to on-site behavior to conversions — including AI traffic as an emerging channel.
@@ -14,8 +18,8 @@ Trigger phrases: "generate my SEO report", "run the SEO + analytics report", "sh
 ## Connectors required
 
 This skill uses the following TMR connectors:
-- Google Search Console
-- Google Analytics 4
+- Google Search Console (`gsc`)
+- Google Analytics 4 (`ga4`)
 
 The runtime procedure below verifies these are available before doing any analytical work. Do not attempt to proceed with partial connector availability.
 
@@ -27,7 +31,7 @@ Follow these steps in order. Do not skip steps. Do not rearrange.
 
 ### 1. Check that TMR's tools are available
 
-Inspect your available tools. The Two Minute Reports MCP exposes these tool names: `verify_team_details`, `list_connectors`, `get_ad_accounts`, `generate_query`, `get_data_insights`. The prefix may vary — users name their MCP connections differently (e.g., "Two Minute Reports", "TMR", "TwoMinuteReports", or a custom name). Match by tool function and the Two Minute Reports MCP server (URL: `https://mcp.twominutereports.com/mcp`), not by exact prefix.
+Inspect your available tools. The current Two Minute Reports MCP exposes these tool names: `verify_team_details`, `list_connectors`, `get_connector_accounts`, `get_connector_query_schema`, `validate_query`, `run_query`. The prefix may vary — users name their MCP connections differently (e.g., "Two Minute Reports", "TMR", "TwoMinuteReports", or a custom name). Match by tool function and the Two Minute Reports MCP server (URL: `https://mcp.twominutereports.com/mcp`), not by exact prefix.
 
 **If none of these tools are present in your available tool list**, the user has not connected the Two Minute Reports MCP to their Claude account. Tell them:
 
@@ -47,7 +51,9 @@ If the tools ARE present, hold onto the resolved tool prefix internally and cont
 
 Call the `verify_team_details` tool from the Two Minute Reports MCP.
 
-- **If the call succeeds and returns a team name**, tell the user which team is active and continue to step 3.
+- **If it returns multiple teams**, present them and ask which to use. Store the chosen `teamId` for every subsequent call.
+- **If the call succeeds and returns a single team**, tell the user which team is active, store its `teamId`, and continue to step 3.
+- **Plan status:** `active`, `in_trial`, and `non_renewing` are fine. If the chosen team's `planStatus` is `cancelled`, stop and tell the user: *"Your Two Minute Reports plan is cancelled, so I can't pull data. Reactivate it at hub.twominutereports.com/billing, then run this skill again."* Do not call `validate_query` or `run_query`.
 - **If the call fails with an authentication, permission, or session error, OR returns an empty/missing team**, tell the user:
 
   > *"Two Minute Reports is connected, but I couldn't verify your team details — your session may have expired or the connection needs to be re-authenticated. Please reconnect Two Minute Reports, then run this skill again. Setup reference: https://twominutereports.com/help/mcp/claude"*
@@ -58,16 +64,18 @@ Call the `verify_team_details` tool from the Two Minute Reports MCP.
 
 ### 3. Verify required connectors are provisioned in TMR
 
-Call the `get_ad_accounts` tool from the Two Minute Reports MCP with `selected_connectors: ["Google Search Console", "Google Analytics 4"]`.
+Call `get_connector_accounts` from the Two Minute Reports MCP once per connector, with `teamId`:
+- `get_connector_accounts(teamId, connectorId: "gsc", status: "enabled")`
+- `get_connector_accounts(teamId, connectorId: "ga4", status: "enabled")`
 
-- **If the response contains accounts for BOTH connectors**, continue to step 4.
-- **If either connector returns empty or is missing**, tell the user:
+- **If BOTH return at least one enabled account**, continue to step 4. (GSC account IDs are site URLs like `https://example.com/`; GA4 account IDs are numeric property IDs.)
+- **If either connector returns empty**, tell the user:
 
   > *"This skill needs both Google Search Console and Google Analytics 4 to be set up inside Two Minute Reports, but one or both aren't connected yet. Please open Two Minute Reports, add the missing connector(s) to your workspace, then come back and run this skill again."*
 
   Stop. Do not proceed with partial connector availability.
 
-- **If the call fails entirely**, use the step 2 reconnect message.
+- **If a call fails entirely** (vs returning empty), use the step 2 reconnect message.
 
 ### 4. Locate skill folder and load configuration
 
@@ -89,42 +97,43 @@ Then read `<install-path>/config.json`.
 
 **If the file exists but `saved: false`, OR doesn't exist, OR can't be read:**
 
-- Reuse the `get_ad_accounts` response from step 3 — do not call again.
+- Reuse the `get_connector_accounts` responses from step 3 — do not call again.
 - Present the accounts grouped by connector and ask: *"Which account(s) would you like to analyze? Pick one per connector (e.g., your GSC property and your GA4 property for the same website)."*
 - Wait for their selection.
 
 This skill does not use currency metrics — do not ask for currency.
 
-### 5. Run prompts and collect data
+### 5. Build, validate, and run the queries
 
-For each prompt below, in order:
+This skill runs **9 structured queries** across the `gsc` and `ga4` connectors (stored in `queries.json`, mirrored below). The previous version sent natural-language prompts to `generate_query`; the new MCP has no such tool, so each data pull is an explicit query built from raw field IDs and validated before running.
 
-a. Call `generate_query` with the user's selected accounts and the prompt text.
-b. If `auto_confirm_query` is `true`, skip confirmation and proceed to (c). Otherwise, present the query summary and ask for explicit confirmation.
-c. Call `get_data_insights` with `user_confirmed: "true"`, the user's selected accounts, the query payload, and the original prompt.
-d. Hold the returned data for synthesis in step 6.
+**Resolve date windows from today's actual date** (GSC data lags ~2–3 days; if the most recent days look empty, that's expected):
+- 90-day window for Q1–Q4, Q6, Q7.
+- The two most recent **full calendar months** for Q5 (GA4 MoM) and Q8a/Q8b (GSC page MoM). Example: if today is in June, the two months are April (M1) and May (M2).
 
----
+**Procedure:**
+a. Assemble the connector entries — one `gsc` entry and one `ga4` entry — with the user's selected accounts and the queries below.
+b. Call `validate_query(teamId, connectors:[...])`. If any query errors, fix the named field/rule and re-validate.
+c. If `auto_confirm_query` is `true`, skip confirmation. Otherwise present a one-line summary of what will be pulled and ask for explicit confirmation.
+d. Call `run_query(teamId, connectors:[...], limit:...)`. No `currencyCode` is needed (this report uses no monetary metrics). If a result returns as a stored file path, parse it with code execution (`connectorResults[].results[].data` → `headers`/`rows`).
+e. Hold all returned data for synthesis in step 6.
 
-**Prompt 1:** Show total impressions, total clicks, average CTR, and average position from Google Search Console for the last 90 days.
+**GSC queries** (account = site URL):
+- **Q1 — GSC totals (90d):** dims none · metrics `clicks`, `impressions`, `ctr`, `position`
+- **Q3 — GSC pages (90d):** dims `page` · metrics `clicks`, `impressions`, `ctr`, `position` (take top 5 by clicks in synthesis)
+- **Q6 — GSC weekly (90d):** dims `week_start_date` · metrics `impressions`, `clicks`
+- **Q8a — GSC pages, month 1:** dims `page` · metrics `impressions`, `clicks` · dateRange = first of the last two full calendar months
+- **Q8b — GSC pages, month 2:** dims `page` · metrics `impressions`, `clicks` · dateRange = second of the last two full calendar months
 
-**Prompt 2:** Show total sessions, total users, total key events, and average bounce rate from GA4 for the last 90 days, aggregated across all traffic.
+**GA4 queries** (account = numeric property ID):
+- **Q2 — GA4 totals (90d):** dims none · metrics `sessions`, `total_users`, `key_events`, `bounce_rate`
+- **Q4 — GA4 landing pages (90d):** dims `landing_page` · metrics `sessions`, `key_events` (take top 5 by sessions and top 5 by key events in synthesis)
+- **Q5 — GA4 landing page × month (last 2 full months):** dims `landing_page`, `month_name` · metrics `sessions`
+- **Q7 — GA4 session source (90d):** dims `session_source` · metrics `sessions`, `total_users`, `new_users`, `bounce_rate`, `key_events`
 
-**Prompt 3:** Show top 5 pages by clicks from Google Search Console for the last 90 days.
+> **AI-referrer handling (Q7):** Pull ALL session sources, then **filter to known AI referrers during synthesis** — `chatgpt.com`, `gemini.google.com`, `claude.ai`, `perplexity.ai`, `copilot.com`, `notebooklm.google.com` (match on the source string, allowing for `/referral` suffixes). This avoids connector-side filter syntax and is robust. If none of these sources appear, report AI traffic as zero/none rather than omitting the section.
 
-**Prompt 4:** Show top 5 landing pages by sessions and top 5 landing pages by key events from GA4 for the last 90 days.
-
-**Prompt 5:** Show sessions by landing page and month for the last 2 months from GA4, so I can compare month-over-month performance per page.
-
-**Prompt 6:** Show weekly total impressions and clicks from Google Search Console for the last 90 days, broken down by week.
-
-**Prompt 7:** Show sessions, total users, new users, bounce rate, and key events from GA4 for the last 90 days, broken down by session source, filtered to known AI referrers only (chatgpt.com, gemini.google.com, claude.ai, perplexity.ai, copilot.com, notebooklm.google.com).
-
-**Prompt 8a:** Show impressions and clicks from Google Search Console broken down by page for the first of the last two full calendar months (e.g. if today is in May, fetch March 1 – March 31).
-
-**Prompt 8b:** Show impressions and clicks from Google Search Console broken down by page for the second of the last two full calendar months (e.g. April 1 – April 30).
-
-> **Keyword deduplication rule (apply during synthesis in step 6):** The Page dimension acts as a proxy for the primary keyword for that page. One page = one keyword slot. Sort all pages by total impressions descending across both periods. Assign each page to the keyword keyword derived from its URL path (last meaningful slug segment, hyphens → spaces). If two pages map to the same readable keyword, keep the one with higher impressions and skip the other. This ensures each keyword in the Best/Worst tables represents a distinct page and topic.
+> **Keyword deduplication rule (apply during synthesis in step 6):** The Page dimension acts as a proxy for the primary keyword for that page. One page = one keyword slot. Sort all pages by total impressions descending across both periods (Q8a + Q8b). Derive each page's keyword from its URL path (last meaningful slug segment, hyphens → spaces). If two pages map to the same readable keyword, keep the one with higher impressions and skip the other. This ensures each keyword in the Best/Worst tables represents a distinct page and topic.
 
 ---
 
@@ -457,7 +466,7 @@ Use this scaffold. Replace every `{{PLACEHOLDER}}` with the user's actual data. 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script>
-// Populate with real weekly data from Prompt 6 results
+// Populate with real weekly data from Q6 results
 // {{WEEKLY_CHART_LABELS}} = JSON array of week label strings e.g. ["Feb 2","Feb 9",...]
 // {{WEEKLY_IMPRESSIONS_DATA}} = JSON array of impression integers
 // {{WEEKLY_CLICKS_DATA}} = JSON array of click integers
@@ -526,7 +535,7 @@ When filling `{{TOP_PAGES_BY_CLICKS_BARS}}`, `{{TOP_PAGES_BY_SESSIONS_BARS}}`, `
 **MoM rendering instructions:**
 
 When filling `{{BEST_PERFORMERS_ROWS}}` and `{{WORST_PERFORMERS_ROWS}}`:
-- Use the two most recent FULL calendar months from the Prompt 5 data
+- Use the two most recent FULL calendar months from the Q5 data
 - Best = top 5 pages by absolute session increase (month 1 → month 2)
 - Worst = top 5 pages by absolute session decrease
 - Exclude `(not set)` landing pages
@@ -535,7 +544,7 @@ When filling `{{BEST_PERFORMERS_ROWS}}` and `{{WORST_PERFORMERS_ROWS}}`:
 
 **Keyword performers rendering instructions:**
 
-When filling `{{KW_BEST_IMP_ROWS}}`, `{{KW_WORST_IMP_ROWS}}`, `{{KW_BEST_CLK_ROWS}}`, `{{KW_WORST_CLK_ROWS}}` from Prompt 8a and 8b data:
+When filling `{{KW_BEST_IMP_ROWS}}`, `{{KW_WORST_IMP_ROWS}}`, `{{KW_BEST_CLK_ROWS}}`, `{{KW_WORST_CLK_ROWS}}` from Q8a and Q8b data:
 
 1. **Deduplication — one keyword per page:** Build a merged list of all pages from both periods. For each page, derive a human-readable keyword label from the URL path: take the last non-empty path segment, replace hyphens with spaces, strip file extensions. Examples: `/blog/google-ads-best-practices` → `google ads best practices`; `/` → `two minute reports` (or site name); `/templates/looker-studio` → `looker studio (templates)`.
 2. **No duplicate pages:** Each page URL appears in at most one row across all four tables. No page is repeated even across best/worst impression vs click tables.
@@ -562,7 +571,7 @@ If yes to either, write to `<install-path>/config.json`:
 
 ```json
 {
-  "version": "1.0.0",
+  "version": "2.0.0",
   "saved": true,
   "accounts": { "<connector>": [{ "label": "...", "value": "..." }] },
   "currency": null,
