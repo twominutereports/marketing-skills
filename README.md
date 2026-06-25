@@ -13,6 +13,7 @@ This repository is a curated collection of Claude skills built for marketers. Ea
 | [Website Traffic Analysis](./seo/website-traffic-analysis/) | Traffic trends, CTR diagnostics, keyword gaps, and a 30-day action plan |
 | [SEO + Analytics Report](./seo/seo-analytics-report/) | Full-funnel organic report combining GSC and GA4 — visibility, top pages, MoM shifts, and AI traffic |
 | [Content Decay Detector](./seo/content-decay-detector/) | Finds pages silently losing traffic, scores severity, and diagnoses the root cause |
+| [Local SEO Audit](./seo/local-seo-audit/) | Combined GMB + GSC + GA4 local audit — visibility, profile actions, search, conversion, and reviews with a health score |
 
 ### PPC
 
@@ -23,6 +24,13 @@ This repository is a curated collection of Claude skills built for marketers. Ea
 | [TikTok Ads Auditor](./ppc/tiktok-ads-audit/) | Campaign, creative, and audience audit with creative fatigue signals |
 | [LinkedIn Ads Auditor](./ppc/linkedin-ads-audit/) | B2B-focused audit across campaigns, creatives, and audiences with CPL and lead quality analysis |
 | [Reddit Ads Auditor](./ppc/reddit-ads-audit/) | Full Reddit Ads audit across campaigns, ad groups, creatives, audiences, and scaling opportunities |
+
+### Social (Organic)
+
+| Skill | Description |
+| --- | --- |
+| [Facebook Insights Report](./social-media/facebook-insights-report/) | Organic Facebook Page report — growth, reach, engagement, and top-performing posts |
+| [Instagram Insights Report](./social-media/instagram-insights-report/) | Organic Instagram report — growth and reach trends, engagement, post/Reels performance, and audience breakdown |
 
 ### Ecommerce
 
@@ -47,7 +55,7 @@ This repository is a curated collection of Claude skills built for marketers. Ea
 
 **Installing a skill in Claude**
 
-1. Download the `.md` skill file from the skill's folder in this repository
+1. Download all files in the skill's folder from this repository (skill.md plus any queries.json and references/)
 2. Go to [claude.ai/customize/skills](https://claude.ai/customize/skills)
 3. Click the **+** icon → **Create skill** → **Upload a skill**
 4. Select the downloaded `skill.md` file
@@ -60,13 +68,17 @@ marketing-skills/
 ├── seo/
 │   ├── website-traffic-analysis/   # Traffic trends, CTR diagnostics, 30-day action plan
 │   ├── seo-analytics-report/       # Full-funnel GSC + GA4 report with AI traffic breakdown
-│   └── content-decay-detector/     # Severity-scored decay detection with root cause diagnosis
+│   ├── content-decay-detector/     # Severity-scored decay detection with root cause diagnosis
+│   └── local-seo-audit/            # Combined GMB + GSC + GA4 local audit with health score
 ├── ppc/
 │   ├── google-ads-audit/           # Campaign, keyword, and wasted spend audit
 │   ├── meta-ads-audit/             # Creative, audience, and placement audit
 │   ├── tiktok-ads-audit/           # Campaign, creative, and audience audit with fatigue signals
 │   ├── linkedin-ads-audit/         # B2B audit with CPL and lead quality analysis
 │   └── reddit-ads-audit/           # Full Reddit Ads audit with scaling opportunities
+├── social-media/
+│   ├── facebook-insights-report/   # Organic Facebook Page growth, reach, and engagement report
+│   └── instagram-insights-report/  # Organic Instagram growth, engagement, and Reels report
 └── ecommerce/
     └── shopify-store-audit/        # CRO audit across funnel, products, and traffic sources
 ```
