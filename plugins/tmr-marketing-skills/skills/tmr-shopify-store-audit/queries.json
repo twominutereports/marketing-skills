@@ -1,0 +1,106 @@
+{
+  "notes": "Structured query templates for the Shopify Store Audit, migrated to the current Two Minute Reports (TMR) MCP. IMPORTANT SCOPE NOTE: the Shopify (shopify) connector is ORDER/SALES/CUSTOMER-centric. It has NO sessions, visitors, conversion rate, bounce rate, add-to-cart events, checkout-funnel steps, cart/checkout abandonment, or device dimension. Those web-analytics signals come from a SEPARATE ga4 connector (optional enrichment). So this audit has two layers: (1) shopify — sales, products, customers, discounts, order-attributed traffic source, geo, payments (always); (2) ga4 — sessions, conversion funnel (add_to_carts/checkouts/ecommerce_purchases), device, landing pages, bounce (ONLY if a GA4 property for the same store is connected). All queries validated clean against live shopify + ga4 accounts. Dates NOT stored — runtime resolves from today's date; compare_to_previous queries run twice. Shopify amounts are real currency. Shopify PAYMENT fields (payment_metrics/payment_dimensions) cannot combine with sales/order fields — the payment query is isolated.",
+  "connectors": {
+    "shopify": {
+      "connectorId": "shopify",
+      "account_id_format": "store handle, e.g. rhino-usa-inc (from get_connector_accounts)",
+      "queries": [
+        {
+          "key": "store_totals",
+          "title": "Store Sales Overview",
+          "dimensions": [],
+          "metrics": ["total_sales_amount", "net_sales_amount", "gross_sales_amount", "discount_amount", "refund_amount", "orders", "avg_order_value", "net_quantity", "new_customers", "returning_customers", "gross_profit", "gross_margin"],
+          "compare_to_previous": true,
+          "note": "No-dimension period totals — powers the KPI dashboard. Run twice for month-over-month."
+        },
+        {
+          "key": "product_performance",
+          "title": "Product Performance",
+          "dimensions": ["product_title"],
+          "metrics": ["net_sales_amount", "ordered_quantity", "net_quantity", "returned_quantity", "orders", "gross_profit"],
+          "compare_to_previous": true,
+          "row_limit": 30,
+          "sort": "net_sales_amount desc",
+          "note": "Sales side of products only. Product CONVERSION RATE / sessions / page views are NOT in Shopify — they need GA4 item-level data. Rank by revenue and flag returns/low units."
+        },
+        {
+          "key": "traffic_source",
+          "title": "Order-Attributed Traffic Source",
+          "dimensions": ["lv_order_source", "lv_order_source_type"],
+          "metrics": ["orders", "net_sales_amount", "avg_order_value"],
+          "compare_to_previous": false,
+          "sort": "net_sales_amount desc",
+          "note": "ORDER-attributed (last-visit) source — orders/revenue by source, NOT sessions or CVR. Use fv_* for first-visit attribution, or lv_order_utm_source/medium for UTM detail. Session-level traffic + CVR come from GA4."
+        },
+        {
+          "key": "geo",
+          "title": "Geographic Performance",
+          "dimensions": ["order_shipping_country"],
+          "metrics": ["orders", "net_sales_amount", "avg_order_value"],
+          "compare_to_previous": false,
+          "row_limit": 20,
+          "sort": "net_sales_amount desc"
+        },
+        {
+          "key": "discounts",
+          "title": "Discount Usage",
+          "dimensions": ["order_discount_code"],
+          "metrics": ["orders", "net_sales_amount", "discount_amount", "avg_order_value"],
+          "compare_to_previous": false,
+          "sort": "orders desc",
+          "note": "Blank/empty discount code = full-price orders. Compare AOV of discounted vs non-discounted; flag discount dependency."
+        },
+        {
+          "key": "customer_type",
+          "title": "New vs Returning Customers",
+          "dimensions": ["customer_type"],
+          "metrics": ["orders", "net_sales_amount", "customers", "avg_order_value"],
+          "compare_to_previous": true,
+          "note": "Repeat-customer revenue share. customer_type splits new vs returning."
+        },
+        {
+          "key": "payments",
+          "title": "Payment Methods",
+          "dimensions": ["payment_method", "accelerated_checkout"],
+          "metrics": ["gross_payments", "net_payments", "transactions"],
+          "compare_to_previous": false,
+          "sort": "transactions desc",
+          "isolation_rule": "Payment fields CANNOT be combined with sales/order/product/customer fields (TMR group rule). This query uses ONLY payment_dimensions + payment_metrics. accelerated_checkout shows Shop Pay / express-checkout adoption."
+        }
+      ]
+    },
+    "ga4": {
+      "connectorId": "ga4",
+      "optional": true,
+      "account_id_format": "numeric GA4 property ID (from get_connector_accounts) — only if a GA4 property exists for the same store",
+      "note": "OPTIONAL enrichment. Only run if a ga4 connector/property for the store is available. This supplies the conversion-funnel, device, session, and landing-page signals that the Shopify connector lacks. Without GA4, those modules degrade gracefully (see SKILL.md).",
+      "queries": [
+        {
+          "key": "ga4_funnel_totals",
+          "title": "GA4 Funnel & Session Totals",
+          "dimensions": [],
+          "metrics": ["sessions", "total_users", "engagement_rate", "bounce_rate", "add_to_carts", "checkouts", "ecommerce_purchases", "cart_to_view_rate", "purchase_to_view_rate"],
+          "compare_to_previous": true,
+          "note": "The real conversion funnel: sessions -> add_to_carts -> checkouts -> ecommerce_purchases. Session CVR = ecommerce_purchases / sessions."
+        },
+        {
+          "key": "ga4_device",
+          "title": "GA4 Device Performance",
+          "dimensions": ["device_category"],
+          "metrics": ["sessions", "ecommerce_purchases", "bounce_rate", "engagement_rate"],
+          "compare_to_previous": false,
+          "note": "Mobile vs desktop vs tablet. Mobile CVR = ecommerce_purchases / sessions per device."
+        },
+        {
+          "key": "ga4_landing_pages",
+          "title": "GA4 Landing Pages",
+          "dimensions": ["landing_page"],
+          "metrics": ["sessions", "bounce_rate", "ecommerce_purchases"],
+          "compare_to_previous": false,
+          "row_limit": 30,
+          "sort": "sessions desc"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "connectorId": "gadw",
+  "notes": "Structured query templates for the Google Ads audit, built against the live Google Ads (gadw) schema and validated clean against a live account. Field IDs are raw (no connector prefix). Dates are NOT stored here — the runtime resolves date_spec from today's date. Queries flagged compare_to_previous:true are run twice (current + matching previous window) for period-over-period deltas. SPEND IS IN MICROS: metrics_cost_micros returns micros — divide by 1,000,000 for currency. ROAS NOTE: roas_calc_conversions and metrics_conversions_value are populated only for accounts that track conversion value/revenue. Lead-gen and custom-conversion accounts return these empty — pivot to CPA (metrics_cost_per_conversion) and conversion volume, and do NOT score or report ROAS. See 'Handling accounts without conversion value' in SKILL.md. IMPRESSION SHARE and QUALITY SCORE may be unavailable on some accounts/campaign types (e.g. PMax, Display) — drop gracefully if empty.",
+  "queries": [
+    {
+      "key": "campaign_performance",
+      "title": "Campaign Performance",
+      "view": "campaign",
+      "dimensions": ["campaign_name", "campaign_advertising_channel_type", "campaign_status"],
+      "metrics": ["metrics_cost_micros", "metrics_impressions", "metrics_clicks", "metrics_ctr", "metrics_average_cpc", "metrics_conversions", "metrics_conversions_from_interactions_rate", "metrics_cost_per_conversion", "roas_calc_conversions", "metrics_search_impression_share", "metrics_search_budget_lost_impression_share", "metrics_search_rank_lost_impression_share"],
+      "filters": [],
+      "compare_to_previous": true,
+      "note": "Impression-share metrics are Search-only; they come back empty on Display/Video/PMax campaigns — drop those columns gracefully when empty."
+    },
+    {
+      "key": "keyword_performance",
+      "title": "Keyword Performance",
+      "view": "keyword_view",
+      "dimensions": ["ad_group_criterion_keyword_text", "ad_group_criterion_match_type", "campaign_name", "ad_group_name", "ad_group_criterion_quality_info_quality_score"],
+      "metrics": ["metrics_cost_micros", "metrics_impressions", "metrics_clicks", "metrics_ctr", "metrics_average_cpc", "metrics_conversions", "metrics_cost_per_conversion"],
+      "filters": [],
+      "compare_to_previous": false,
+      "note": "Quality score (ad_group_criterion_quality_info_quality_score) is 1-10 and only populated for eligible search keywords; treat empty as 'no QS data'."
+    },
+    {
+      "key": "search_terms",
+      "title": "Search Terms",
+      "view": "search_term_view",
+      "dimensions": ["search_term_view_search_term", "campaign_name", "ad_group_name"],
+      "metrics": ["metrics_cost_micros", "metrics_impressions", "metrics_clicks", "metrics_ctr", "metrics_average_cpc", "metrics_conversions", "metrics_cost_per_conversion"],
+      "filters": [],
+      "compare_to_previous": false
+    },
+    {
+      "key": "ad_performance",
+      "title": "Ad Performance",
+      "view": "ad_group_ad",
+      "dimensions": ["ad_group_ad_ad_name", "ad_group_ad_ad_type", "campaign_name", "ad_group_name", "ad_group_ad_status"],
+      "metrics": ["metrics_cost_micros", "metrics_impressions", "metrics_clicks", "metrics_ctr", "metrics_conversions", "metrics_conversions_from_interactions_rate"],
+      "filters": [],
+      "compare_to_previous": false
+    },
+    {
+      "key": "device_performance",
+      "title": "Device Performance",
+      "view": "segment",
+      "dimensions": ["segments_device"],
+      "metrics": ["metrics_cost_micros", "metrics_clicks", "metrics_impressions", "metrics_ctr", "metrics_average_cpc", "metrics_conversions", "metrics_cost_per_conversion", "roas_calc_conversions"],
+      "filters": [],
+      "compare_to_previous": false
+    },
+    {
+      "key": "geo_performance",
+      "title": "Geo Performance",
+      "view": "geographic_view",
+      "dimensions": ["segments_geo_target_country"],
+      "metrics": ["metrics_cost_micros", "metrics_clicks", "metrics_impressions", "metrics_ctr", "metrics_conversions", "metrics_cost_per_conversion"],
+      "filters": [],
+      "compare_to_previous": false,
+      "row_limit": 20,
+      "sort": "metrics_cost_micros desc"
+    },
+    {
+      "key": "dayparting",
+      "title": "Dayparting (Day of Week + Hour)",
+      "view": "segment",
+      "dimensions": ["day_of_week", "hour"],
+      "metrics": ["metrics_cost_micros", "metrics_clicks", "metrics_impressions", "metrics_conversions"],
+      "filters": [],
+      "compare_to_previous": false
+    }
+  ]
+}

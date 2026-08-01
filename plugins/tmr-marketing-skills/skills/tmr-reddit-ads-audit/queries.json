@@ -1,0 +1,77 @@
+{
+  "connectorId": "redditads",
+  "notes": "Structured query templates for the Reddit Ads audit, built against the live Reddit Ads (redditads) schema and validated clean against a live account. Field IDs are raw. Dates NOT stored — runtime resolves from today's date. compare_to_previous:true queries run twice (current + matching previous window). REDDIT BREAKDOWN RULES (enforced by validate_query): community_name, placement, device_os, country/region, and gender are each their OWN breakdown group and CANNOT be combined with each other OR with campaign/ad_group/ad/time dimensions. Each breakdown is a single-pivot query carrying only metrics. CONVERSIONS ARE PER ACTION TYPE: there is no single 'conversions' metric. Reddit reports conversion_{action}_clicks (click-attributed), _views (view-attributed), _ecpa (CPA), and _total_value (revenue) for purchase / lead / sign_up / add_to_cart / etc. ROAS = conversion_purchase_total_value / spend (only for purchase-tracking accounts). NO AUDIENCE-TYPE DIMENSION: Reddit doesn't expose interest/keyword/retargeting as a field — community_name (subreddit) is the only targeting breakdown; infer other audience types from ad group names. Spend is real currency, NOT micros.",
+  "queries": [
+    {
+      "key": "campaign_performance",
+      "title": "Campaign Performance",
+      "group": "campaign",
+      "dimensions": ["campaign_name", "campaign_objective", "campaign_effective_status"],
+      "metrics": ["spend", "impressions", "clicks", "ctr", "cpc", "ecpm", "conversion_purchase_clicks", "conversion_purchase_ecpa", "conversion_purchase_total_value", "conversion_lead_clicks", "conversion_lead_ecpa", "conversion_sign_up_clicks"],
+      "filters": [],
+      "compare_to_previous": true
+    },
+    {
+      "key": "ad_group_performance",
+      "title": "Ad Group Performance",
+      "group": "ad_group",
+      "dimensions": ["ad_group_name", "campaign_name", "ad_group_effective_status", "ad_group_bid_type"],
+      "metrics": ["spend", "impressions", "clicks", "ctr", "cpc", "conversion_purchase_clicks", "conversion_purchase_ecpa", "conversion_lead_clicks", "conversion_lead_ecpa"],
+      "filters": [],
+      "compare_to_previous": false,
+      "audience_note": "Reddit has no audience-type dimension. Infer interest / subreddit / keyword / retargeting from ad_group_name patterns. True subreddit targeting performance comes from the community query."
+    },
+    {
+      "key": "ad_performance",
+      "title": "Ad / Creative Performance",
+      "group": "ad",
+      "dimensions": ["ad_name", "ad_group_name", "campaign_name", "ad_effective_status"],
+      "metrics": ["spend", "impressions", "clicks", "ctr", "cpc", "video_completion_rate", "conversion_purchase_clicks", "conversion_purchase_ecpa"],
+      "filters": [],
+      "compare_to_previous": true,
+      "note": "compare_to_previous enables creative fatigue (CTR decline vs prior period). video_completion_rate populates only for video ads."
+    },
+    {
+      "key": "community_performance",
+      "title": "Community (Subreddit) Performance",
+      "group": "community_breakdown",
+      "dimensions": ["community_name"],
+      "metrics": ["spend", "impressions", "clicks", "ctr", "cpc", "conversion_purchase_clicks", "conversion_purchase_ecpa"],
+      "filters": [],
+      "compare_to_previous": false,
+      "pivot_rule": "Single breakdown pivot. No campaign/ad/other-breakdown dimensions allowed alongside it."
+    },
+    {
+      "key": "placement_performance",
+      "title": "Placement Performance",
+      "group": "placement_breakdown",
+      "dimensions": ["placement"],
+      "metrics": ["spend", "impressions", "clicks", "ctr", "cpc", "conversion_purchase_clicks", "conversion_purchase_ecpa"],
+      "filters": [],
+      "compare_to_previous": false,
+      "pivot_rule": "Single breakdown pivot."
+    },
+    {
+      "key": "device_performance",
+      "title": "Device Performance",
+      "group": "device_breakdown",
+      "dimensions": ["device_os"],
+      "metrics": ["spend", "impressions", "clicks", "ctr", "cpc", "conversion_purchase_clicks", "conversion_purchase_ecpa"],
+      "filters": [],
+      "compare_to_previous": false,
+      "pivot_rule": "Single breakdown pivot."
+    },
+    {
+      "key": "geo_performance",
+      "title": "Geo Performance",
+      "group": "geo_breakdown",
+      "dimensions": ["country"],
+      "metrics": ["spend", "impressions", "clicks", "ctr", "cpc", "conversion_purchase_clicks", "conversion_purchase_ecpa"],
+      "filters": [],
+      "compare_to_previous": false,
+      "row_limit": 20,
+      "sort": "spend desc",
+      "pivot_rule": "Single breakdown pivot. Use 'region' instead of 'country' for sub-national detail (still single-pivot)."
+    }
+  ]
+}

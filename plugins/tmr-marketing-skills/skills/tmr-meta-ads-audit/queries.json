@@ -1,0 +1,83 @@
+{
+  "connectorId": "fads",
+  "notes": "Structured query templates for the Meta Ads audit, built against the live Facebook Ads (fads) schema and validated clean against a live account. Field IDs are raw (no connector prefix). Dates are NOT stored here — the runtime resolves date_spec from today's date. Queries flagged compare_to_previous:true are run twice (current window + matching previous window) so the audit can compute period-over-period deltas. ROAS NOTE: purchase_roas_all and conversion_values are populated only for accounts that track purchase revenue. Lead-gen, app, and custom-conversion accounts return these empty — in that case the audit must pivot to CPA (cost_per_conversion) and conversion volume, and must NOT score or report ROAS. See the 'Handling accounts without purchase revenue' section in SKILL.md.",
+  "queries": [
+    {
+      "key": "campaign_performance",
+      "title": "Campaign Performance",
+      "dimensions": ["campaign_name", "campaign_objective", "campaign_effective_status"],
+      "metrics": ["spend", "impressions", "reach", "clicks", "ctr", "cpc", "cpm", "frequency", "conversions", "cost_per_conversion", "purchase_roas_all", "conversion_values"],
+      "filters": [],
+      "compare_to_previous": true
+    },
+    {
+      "key": "adset_performance",
+      "title": "Ad Set Performance + Audience",
+      "dimensions": ["adset_name", "campaign_name", "adset_effective_status", "targeting_age_min", "targeting_age_max"],
+      "metrics": ["spend", "impressions", "reach", "clicks", "ctr", "cpc", "cpm", "frequency", "conversions", "cost_per_conversion", "purchase_roas_all"],
+      "filters": [],
+      "compare_to_previous": false,
+      "audience_inference": "fads has no native audience-type dimension. Infer interest / lookalike / remarketing / broad from adset_name patterns (e.g. 'LLA', 'lookalike', 'retargeting', 'RMK', 'broad', interest names) and targeting age span. Module 7 (Audience) uses this query — there is no separate audience fetch."
+    },
+    {
+      "key": "ad_creative_performance",
+      "title": "Ad Creative Performance",
+      "dimensions": ["ad_name", "adset_name", "campaign_name", "ad_creative_object_type", "ad_effective_status"],
+      "metrics": ["spend", "impressions", "clicks", "ctr", "cpc", "cpm", "frequency", "conversions", "cost_per_conversion", "purchase_roas_all", "quality_ranking", "engagement_rate_ranking", "conversion_rate_ranking"],
+      "filters": [],
+      "compare_to_previous": true
+    },
+    {
+      "key": "placement_platform",
+      "title": "Placement - Publisher Platform",
+      "dimensions": ["publisher_platform"],
+      "metrics": ["spend", "impressions", "clicks", "ctr", "cpc", "cpm", "conversions", "cost_per_conversion"],
+      "filters": [],
+      "compare_to_previous": false,
+      "placement_note": "publisher_platform and platform_position CANNOT be combined in one query (fads field-combination rule — validation fails). Placement is split into two queries: this one (Facebook/Instagram/Audience Network/Messenger) and placement_position (Feed/Stories/Reels/etc.). Module 8 combines both result sets."
+    },
+    {
+      "key": "placement_position",
+      "title": "Placement - Position",
+      "dimensions": ["platform_position"],
+      "metrics": ["spend", "impressions", "clicks", "ctr", "cpc", "cpm", "conversions", "cost_per_conversion"],
+      "filters": [],
+      "compare_to_previous": false
+    },
+    {
+      "key": "device_performance",
+      "title": "Device Performance",
+      "dimensions": ["impression_device", "device_platform"],
+      "metrics": ["spend", "impressions", "clicks", "ctr", "cpc", "conversions", "cost_per_conversion", "purchase_roas_all"],
+      "filters": [],
+      "compare_to_previous": false
+    },
+    {
+      "key": "geo_performance",
+      "title": "Geo Performance",
+      "dimensions": ["country_name"],
+      "metrics": ["spend", "impressions", "clicks", "ctr", "conversions", "cost_per_conversion"],
+      "filters": [],
+      "compare_to_previous": false,
+      "row_limit": 20,
+      "sort": "spend desc"
+    },
+    {
+      "key": "dayparting",
+      "title": "Dayparting (Hour of Day)",
+      "dimensions": ["hour"],
+      "metrics": ["spend", "impressions", "clicks", "conversions"],
+      "filters": [],
+      "compare_to_previous": false,
+      "weekday_note": "fads exposes hour-of-day (hour) but no native weekday dimension. For day-of-week analysis, add 'date' as a dimension and derive the weekday at runtime."
+    },
+    {
+      "key": "funnel_events",
+      "title": "Funnel Events",
+      "dimensions": ["campaign_name"],
+      "metrics": ["link_clicks", "website_fb_landing_page_views", "all_add_to_cart", "all_initiated_checkout", "all_purchases"],
+      "filters": [],
+      "compare_to_previous": false
+    }
+  ]
+}

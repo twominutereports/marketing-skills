@@ -53,13 +53,66 @@ This repository is a curated collection of Claude skills built for marketers. Ea
 - [Two Minute Reports](https://twominutereports.com) MCP connected in Claude Settings
 - The relevant data source (Google Analytics, Search Console, etc.) linked within Two Minute Reports
 
-**Installing a skill in Claude**
+### Claude Code — one install for everything (recommended)
 
-1. Download all files in the skill's folder from this repository (skill.md plus any queries.json and references/)
+This repository is also a Claude Code plugin marketplace. Installing the plugin adds
+**all** the skills *and* connects the Two Minute Reports MCP server, so there's no
+separate MCP setup step:
+
+```
+/plugin marketplace add twominutereports/marketing-skills
+/plugin install tmr-marketing-skills@marketing-skills
+/reload-plugins
+```
+
+Then just ask — e.g. *"Audit my Google Ads account"*.
+
+Copying a skill folder into `~/.claude/skills/` by hand still works and always has.
+Installing from the marketplace is recommended for one reason: a copied folder never
+updates. When a skill improves here, marketplace installs can be refreshed
+(`/plugin marketplace update marketing-skills`); a hand-copied one keeps running the
+version you downloaded until you notice and replace it.
+
+### Claude (claude.ai) — upload the skill folder
+
+1. Download the skill's **whole folder** as a zip, with `SKILL.md` at its root.
+   The easiest way is the [Skills tab in the TMR hub](https://app.twominutereports.com/mcp?tab=skills),
+   whose Download button builds exactly that zip for you.
 2. Go to [claude.ai/customize/skills](https://claude.ai/customize/skills)
 3. Click the **+** icon → **Create skill** → **Upload a skill**
-4. Select the downloaded `skill.md` file
+4. Select the zip
 5. Start chatting — each skill's README lists the trigger phrases you can use
+
+> **Upload the folder, not just `skill.md`.** Most skills read
+> `references/thresholds.md` for their scoring benchmarks; with only the markdown
+> file those instructions point at nothing and the scores get invented. The file must
+> also be named `SKILL.md` (uppercase) — that's the name Claude looks for.
+
+### ChatGPT — upload the skill folder
+
+Same zip. In ChatGPT: **Customize → Skills → + → Create Skill → Upload a Skill**.
+Skills are available on ChatGPT Business, Enterprise, Edu and Healthcare plans.
+
+### Codex CLI
+
+```
+git clone https://github.com/twominutereports/marketing-skills ~/.codex/skills/tmr-marketing-skills
+codex --enable skills
+```
+
+## Plugin build (maintainers)
+
+`plugins/tmr-marketing-skills/` is **generated** — the category folders above are the
+source of truth. After changing any `skill.md`, regenerate and commit:
+
+```
+node scripts/build-plugin.mjs
+```
+
+CI runs `--check` on every PR, so a stale plugin fails the build instead of quietly
+shipping the old copy to whoever installs it. The generator lowercase→uppercase
+renames `skill.md` to `SKILL.md`, names each skill folder from its frontmatter `name`,
+and copies `references/` and `queries.json` alongside it.
 
 ## Repository Structure
 

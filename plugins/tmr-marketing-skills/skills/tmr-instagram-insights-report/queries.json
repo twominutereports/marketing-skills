@@ -1,0 +1,67 @@
+{
+  "connectorId": "ins",
+  "notes": "Structured query templates for the Instagram Insights report, built against the live Instagram Insights (ins) connector schema and validated clean against a live account. ORGANIC ONLY — no paid/spend metrics exist on this connector. Field IDs are raw. Dates NOT stored — runtime resolves from today's date; compare_to_previous queries run twice (current + matching previous window). Instagram is permissive: audience dimensions (age, gender, country, city) combine with each other (validated). DATA NOTES: Story insights are last-24h only (excluded from period reporting). Lifetime metrics (account_followers_count/follows/media) are point-in-time snapshots — use account_new_followers/account_unfollowers/account_growth for period change. Audience demographics are current snapshots, not time-series.",
+  "queries": [
+    {
+      "key": "account_totals",
+      "title": "Account Insights Totals",
+      "dimensions": [],
+      "metrics": ["account_reach", "account_profile_views", "profile_engaged_users", "account_new_followers", "account_unfollowers", "account_growth", "account_website_clicks", "account_post_likes", "account_post_comments", "account_post_saves", "account_post_shares", "account_post_replies"],
+      "compare_to_previous": true,
+      "note": "Period totals — powers the KPI dashboard and growth/engagement headline. Run twice for period-over-period."
+    },
+    {
+      "key": "lifetime_snapshot",
+      "title": "Lifetime Snapshot",
+      "dimensions": [],
+      "metrics": ["account_followers_count", "account_follows_count", "account_media_count"],
+      "compare_to_previous": false,
+      "note": "Point-in-time current totals (followers, following, posts). Not a period sum — headline only."
+    },
+    {
+      "key": "growth_trend",
+      "title": "Weekly Growth & Reach Trend",
+      "dimensions": ["week_start_date"],
+      "metrics": ["account_new_followers", "account_unfollowers", "account_reach", "account_profile_views"],
+      "compare_to_previous": false,
+      "note": "Weekly trend for the growth chart. Use date for daily if a finer line is wanted."
+    },
+    {
+      "key": "media_performance",
+      "title": "Post / Media Performance",
+      "dimensions": ["media_caption", "media_type", "media_product_type", "media_permalink", "media_timestamp"],
+      "metrics": ["media_like_count", "media_comments_count", "media_saved", "media_shares", "media_engagement", "media_reach", "media_views"],
+      "compare_to_previous": false,
+      "row_limit": 30,
+      "sort": "media_engagement desc",
+      "note": "Per-post performance. media_product_type distinguishes FEED / REELS / etc. Saves + shares are the highest-value signals."
+    },
+    {
+      "key": "reels_performance",
+      "title": "Reels Performance",
+      "dimensions": ["media_product_type", "media_caption", "media_permalink"],
+      "metrics": ["media_reel_total_interactions", "media_reel_shares", "media_views", "media_reach"],
+      "compare_to_previous": false,
+      "sort": "media_views desc",
+      "note": "Filter to REELS rows in synthesis. Compare Reels reach vs feed reach from media_performance."
+    },
+    {
+      "key": "audience_demographics",
+      "title": "Audience — Age & Gender",
+      "dimensions": ["audience_age", "audience_gender"],
+      "metrics": ["account_followers_count"],
+      "compare_to_previous": false,
+      "note": "Current follower composition by age and gender (validated together). Snapshot, not time-series."
+    },
+    {
+      "key": "audience_geo",
+      "title": "Audience — Geography",
+      "dimensions": ["audience_country"],
+      "metrics": ["account_followers_count"],
+      "compare_to_previous": false,
+      "sort": "account_followers_count desc",
+      "row_limit": 20,
+      "note": "Follower composition by country. Use audience_city for city-level detail."
+    }
+  ]
+}

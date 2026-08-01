@@ -1,0 +1,92 @@
+{
+  "connectorId": "lads",
+  "notes": "Structured query templates for the LinkedIn Ads audit, built against the live LinkedIn Ads (lads) schema and validated clean against a live account. Field IDs are raw (no connector prefix). Dates are NOT stored here — runtime resolves from today's date. compare_to_previous:true queries run twice (current + matching previous window) for period-over-period deltas. CRITICAL LINKEDIN PIVOT RULES (enforced by validate_query): (1) Each DEMOGRAPHICS field (job function, seniority, industry, company size, job title, country, region) must be its OWN query — demographics cannot be combined with each other. (2) DEMOGRAPHICS fields cannot be combined with CAMPAIGN / CAMPAIGN_GROUP / CREATIVE / CONVERSION fields at all (not even campaign_name). That is why audience is split into separate single-pivot queries and carries no campaign dimension. Spend (costInLocalCurrency) is in real currency, NOT micros. ROAS NOTE: return_on_spend / conversionValueInLocalCurrency populate only for value-tracking accounts; lead-gen accounts return them empty — pivot to CPL/CPA and lead/conversion volume and do NOT score ROAS. See 'Handling accounts without conversion value' in SKILL.md.",
+  "queries": [
+    {
+      "key": "campaign_performance",
+      "title": "Campaign Performance",
+      "group": "campaign",
+      "dimensions": ["campaign_name", "campaign_objectivetype", "campaign_type", "campaign_status"],
+      "metrics": ["costInLocalCurrency", "impressions", "clicks", "click_through_rate", "costPerClick", "oneClickLeads", "costPerLead", "oneClickLeadFormOpens", "lead_form_completion_rate", "externalWebsiteConversions", "costPerConversion", "avg_frequency"],
+      "filters": [],
+      "compare_to_previous": true
+    },
+    {
+      "key": "creative_performance",
+      "title": "Creative (Ad) Performance",
+      "group": "creative",
+      "dimensions": ["creative_creativename", "creative_type", "campaign_name", "creative_status"],
+      "metrics": ["costInLocalCurrency", "impressions", "clicks", "click_through_rate", "costPerClick", "oneClickLeads", "costPerLead", "externalWebsiteConversions", "costPerConversion", "videoViews", "videoCompletions", "documentCompletions", "avg_frequency"],
+      "filters": [],
+      "compare_to_previous": true,
+      "note": "compare_to_previous enables creative fatigue (CTR decline vs prior period). video* / document* metrics populate only for those formats."
+    },
+    {
+      "key": "audience_job_function",
+      "title": "Audience - Job Function",
+      "group": "demographics",
+      "dimensions": ["member_job_function_member_job_function"],
+      "metrics": ["costInLocalCurrency", "impressions", "clicks", "click_through_rate", "oneClickLeads", "costPerLead", "externalWebsiteConversions", "costPerConversion"],
+      "filters": [],
+      "compare_to_previous": false,
+      "pivot_rule": "Single demographic pivot only. No campaign/creative/conversion dimensions allowed alongside it."
+    },
+    {
+      "key": "audience_seniority",
+      "title": "Audience - Seniority",
+      "group": "demographics",
+      "dimensions": ["member_seniority_member_seniority"],
+      "metrics": ["costInLocalCurrency", "impressions", "clicks", "click_through_rate", "oneClickLeads", "costPerLead", "externalWebsiteConversions", "costPerConversion"],
+      "filters": [],
+      "compare_to_previous": false
+    },
+    {
+      "key": "audience_industry",
+      "title": "Audience - Industry",
+      "group": "demographics",
+      "dimensions": ["member_industry_member_industry"],
+      "metrics": ["costInLocalCurrency", "impressions", "clicks", "click_through_rate", "oneClickLeads", "costPerLead", "externalWebsiteConversions", "costPerConversion"],
+      "filters": [],
+      "compare_to_previous": false
+    },
+    {
+      "key": "audience_company_size",
+      "title": "Audience - Company Size",
+      "group": "demographics",
+      "dimensions": ["member_company_size_member_company_size"],
+      "metrics": ["costInLocalCurrency", "impressions", "clicks", "click_through_rate", "oneClickLeads", "costPerLead", "externalWebsiteConversions", "costPerConversion"],
+      "filters": [],
+      "compare_to_previous": false
+    },
+    {
+      "key": "geo_performance",
+      "title": "Geo Performance",
+      "group": "demographics",
+      "dimensions": ["member_country_v2_member_country_v2"],
+      "metrics": ["costInLocalCurrency", "impressions", "clicks", "click_through_rate", "oneClickLeads", "costPerLead", "externalWebsiteConversions", "costPerConversion"],
+      "filters": [],
+      "compare_to_previous": false,
+      "row_limit": 20,
+      "sort": "costInLocalCurrency desc",
+      "pivot_rule": "Country is a DEMOGRAPHICS-group field — must be its own single-pivot query, no campaign/creative alongside."
+    },
+    {
+      "key": "device_performance",
+      "title": "Device Performance",
+      "group": "publisher_platform",
+      "dimensions": ["impression_device"],
+      "metrics": ["costInLocalCurrency", "impressions", "clicks", "click_through_rate", "oneClickLeads", "costPerLead", "externalWebsiteConversions", "costPerConversion"],
+      "filters": [],
+      "compare_to_previous": false
+    },
+    {
+      "key": "ad_format_performance",
+      "title": "Ad Format Performance",
+      "group": "creative",
+      "dimensions": ["creative_type"],
+      "metrics": ["costInLocalCurrency", "impressions", "clicks", "click_through_rate", "costPerClick", "oneClickLeads", "costPerLead", "externalWebsiteConversions", "costPerConversion"],
+      "filters": [],
+      "compare_to_previous": false
+    }
+  ]
+}

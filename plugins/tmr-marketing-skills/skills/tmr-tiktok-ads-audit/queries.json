@@ -1,0 +1,75 @@
+{
+  "connectorId": "ttads",
+  "notes": "Structured query templates for the TikTok Ads audit, built against the live TikTok Ads (ttads) schema and validated clean against a live account. Field IDs are raw. Dates NOT stored — runtime resolves from today's date. compare_to_previous:true queries run twice (current + matching previous window). TikTok is MORE PERMISSIVE than LinkedIn/Reddit — audience dimensions (age, gender, country, platform, placement, interest_category) CAN combine with each other and with campaign dimensions (validated). We still keep demographics/placement/device/geo as separate single-purpose queries for cleaner analysis and to avoid row fragmentation. ROAS / CONVERSION VARIES BY ACCOUNT SETUP: TikTok exposes many conversion + ROAS sources depending on the campaign's optimization and tracking. Primary ROAS fields by setup: complete_payment_roas (web pixel purchases), onsite_shopping_roas (TikTok Shop / onsite), offline_shopping_events_roas (offline), gmv_roi (GMV Max campaigns). The generic outcome is conversion/cost_per_conversion/conversion_rate, and 'result'/cost_per_result is the optimization-goal outcome. Detect which is populated at runtime (see Step 5 in SKILL.md). Spend is real currency, NOT micros.",
+  "queries": [
+    {
+      "key": "campaign_performance",
+      "title": "Campaign Performance",
+      "group": "campaign",
+      "dimensions": ["campaign_name", "campaign_objective", "campaign_secondary_status"],
+      "metrics": ["spend", "impressions", "clicks", "ctr", "cpc", "cpm", "reach", "frequency", "conversion", "cost_per_conversion", "conversion_rate", "complete_payment_roas"],
+      "filters": [],
+      "compare_to_previous": true,
+      "note": "Swap complete_payment_roas for onsite_shopping_roas / offline_shopping_events_roas / gmv_roi if that is the account's tracked ROAS source (Step 5)."
+    },
+    {
+      "key": "adgroup_performance",
+      "title": "Ad Group Performance",
+      "group": "adgroup",
+      "dimensions": ["adgroup_name", "campaign_name", "adgroup_secondary_status", "adgroup_placement_type"],
+      "metrics": ["spend", "impressions", "clicks", "ctr", "cpc", "cpm", "frequency", "conversion", "cost_per_conversion", "conversion_rate"],
+      "filters": [],
+      "compare_to_previous": false
+    },
+    {
+      "key": "ad_creative_performance",
+      "title": "Ad / Creative Performance",
+      "group": "ad",
+      "dimensions": ["ad_name", "adgroup_name", "campaign_name", "ad_format", "ad_secondary_status"],
+      "metrics": ["spend", "impressions", "clicks", "ctr", "cpc", "conversion", "cost_per_conversion", "conversion_rate", "video_play_actions", "video_watched_6s", "video_views_p100"],
+      "filters": [],
+      "compare_to_previous": true,
+      "note": "compare_to_previous enables creative fatigue (CTR decline vs prior period). video_watched_6s / video_views_p100 power the 6s view-through and completion-rate checks. ad_format gives In-Feed / Spark / etc."
+    },
+    {
+      "key": "demographics",
+      "title": "Audience - Age & Gender",
+      "group": "audience",
+      "dimensions": ["age", "gender"],
+      "metrics": ["spend", "impressions", "clicks", "ctr", "cpc", "conversion", "cost_per_conversion", "conversion_rate"],
+      "filters": [],
+      "compare_to_previous": false,
+      "note": "age + gender validated together. interest_category is also available as its own query if interest-level analysis is needed."
+    },
+    {
+      "key": "placement_performance",
+      "title": "Placement Performance",
+      "group": "audience",
+      "dimensions": ["placement"],
+      "metrics": ["spend", "impressions", "clicks", "ctr", "cpc", "conversion", "cost_per_conversion"],
+      "filters": [],
+      "compare_to_previous": false
+    },
+    {
+      "key": "device_performance",
+      "title": "Device Platform Performance",
+      "group": "audience",
+      "dimensions": ["platform"],
+      "metrics": ["spend", "impressions", "clicks", "ctr", "cpc", "conversion", "cost_per_conversion"],
+      "filters": [],
+      "compare_to_previous": false
+    },
+    {
+      "key": "geo_performance",
+      "title": "Geo Performance",
+      "group": "audience",
+      "dimensions": ["country"],
+      "metrics": ["spend", "impressions", "clicks", "ctr", "cpc", "conversion", "cost_per_conversion"],
+      "filters": [],
+      "compare_to_previous": false,
+      "row_limit": 20,
+      "sort": "spend desc",
+      "note": "Use province_name instead of country for sub-national/region detail."
+    }
+  ]
+}
