@@ -1,0 +1,20 @@
+{
+  "name": "marketing-skills",
+  "owner": {
+    "name": "Two Minute Reports",
+    "url": "https://twominutereports.com"
+  },
+  "plugins": [
+    {
+      "name": "tmr-marketing-skills",
+      "source": "./plugins/tmr-marketing-skills",
+      "description": "Marketing audit and reporting skills that run on your live Two Minute Reports data — Google Ads, Meta, LinkedIn, TikTok, Reddit, Shopify, GA4, Search Console and social. Includes the TMR MCP server, so one install covers both the skills and the data connection.",
+      "author": {
+        "name": "Two Minute Reports",
+        "url": "https://twominutereports.com"
+      },
+      "homepage": "https://github.com/twominutereports/marketing-skills",
+      "license": "MIT"
+    }
+  ]
+}

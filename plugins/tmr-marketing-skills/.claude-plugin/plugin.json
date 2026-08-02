@@ -1,0 +1,11 @@
+{
+  "name": "tmr-marketing-skills",
+  "description": "Marketing audit and reporting skills that run on your live Two Minute Reports data.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Two Minute Reports",
+    "url": "https://twominutereports.com"
+  },
+  "homepage": "https://github.com/twominutereports/marketing-skills",
+  "license": "MIT"
+}

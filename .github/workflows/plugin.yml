@@ -1,0 +1,21 @@
+name: plugin
+
+# The plugin under plugins/ is GENERATED from the category folders. If someone
+# edits a skill.md and forgets to regenerate, the marketplace would keep serving
+# the old copy — which is worse than a build failure, because it fails silently
+# for whoever installs it. This check makes that state impossible to merge.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check-plugin-up-to-date:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Verify plugins/ matches the skill sources
+        run: node scripts/build-plugin.mjs --check
