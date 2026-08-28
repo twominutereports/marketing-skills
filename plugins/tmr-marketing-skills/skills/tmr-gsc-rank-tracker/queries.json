@@ -1,0 +1,50 @@
+{
+  "notes": "Structured query template for the GSC Rank Tracker, built for the current TMR MCP. One connector: gsc (site URL account IDs). Field IDs are raw. Dates are NOT stored — the runtime resolves them from today's date: endDate = today - 3 days (GSC reporting lag), startDate = endDate - N calendar months where N is the user-chosen lookback (1, 3, or 6). Snapshot anchors are the 1st and 15th of every calendar month inside that window (twice-monthly sampling); each anchor's window runs from the anchor to the day before the next anchor, with the final window ending at endDate. One query is built per tracked keyword, each with a distinct title (Rank - <keyword>), and all of them are sent in a single connectors entry. The query filter is always an exact-match filter on the query dimension; the page filter is added ONLY when the user has voluntarily pinned a URL for that keyword. Country is an ISO-3166 alpha-3 code in reportParams.countries. Rows come back as [date, position, clicks, impressions] for days with impressions only; empty days are absent and become N/R. Per snapshot window the value is the impression-weighted average position: sum(position x impressions) / sum(impressions), rounded to 1 decimal. No currency (this report has no monetary metrics). Always validate_query before run_query.",
+  "connectors": {
+    "gsc": {
+      "connectorId": "gsc",
+      "account_id_format": "site URL, e.g. https://example.com/",
+      "queries": [
+        {
+          "key": "q1_rank_history_per_keyword",
+          "title": "Rank history (one query per tracked keyword)",
+          "connectorId": "gsc",
+          "metrics": ["position", "clicks", "impressions"],
+          "dimensions": ["date"],
+          "filters": [
+            { "filterField": "query", "operator": "equals", "expression": "{{TARGET_KEYWORD}}" }
+          ],
+          "optional_filters": [
+            {
+              "when": "the user voluntarily pinned a page for this keyword (keyword | https://full/url) — never ask for this",
+              "filterField": "page",
+              "operator": "equals",
+              "expression": "{{OPTIONAL_TARGET_PAGE_URL}}"
+            }
+          ],
+          "reportParams": {
+            "gscReportType": "analytics",
+            "searchTypes": ["web"],
+            "countries": ["{{COUNTRY_CODE_ALPHA3}}"]
+          },
+          "sort": [{ "sortField": "date", "direction": "asc" }],
+          "window": "last_n_months",
+          "date_spec": {
+            "type": "last_n_months",
+            "n": "{{MONTHS}}",
+            "allowed_n": [1, 3, 6],
+            "lag_days": 3
+          },
+          "snapshot_spec": {
+            "per_month": 2,
+            "anchors": ["1st", "15th"],
+            "aggregation": "impression_weighted_avg_position",
+            "empty_window_value": "N/R"
+          },
+          "limit": 1000,
+          "synthesis": "Bucket rows into snapshot windows; per window compute the impression-weighted average position rounded to 1 decimal (empty window = N/R). Build a matrix of keywords (rows) x anchor dates (columns, newest to oldest). Per keyword: latest = most recent non-N/R value, previous = the non-N/R value immediately before it, change = previous - latest (positive = improved, because a lower position is better). Colour bands: <=10 green, 11-20 yellow, 21-50 orange, >50 red, N/R grey."
+        }
+      ]
+    }
+  }
+}
