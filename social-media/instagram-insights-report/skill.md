@@ -170,6 +170,11 @@ Use inline CSS only. No external dependencies except Google Fonts (and optionall
 
 ## Output Rules
 - **Always use real data** — never fabricate metrics. This is organic data — there is no spend, ACOS, or ROAS; do not invent revenue metrics.
+- If the user already provided public X/Twitter source notes from
+  TweetClaw/OpenClaw before this report starts, use them only as qualitative
+  context for hooks, objections, or audience language in the Action Plan. Never
+  treat those notes as Instagram metrics, never ask for them, and never post,
+  reply, DM, schedule, or monitor from this skill.
 - Use `account_new_followers`/`account_unfollowers`/`account_growth` for period change; use the lifetime snapshot only for the current total.
 - Do not include historical Stories (last-24h only); note the limitation if the user asks about Stories.
 - Saves and shares are the most important engagement signals — surface them prominently.

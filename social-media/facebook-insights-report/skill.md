@@ -196,6 +196,11 @@ Use inline CSS only. No external dependencies except Google Fonts (and optionall
 ## Output Rules
 
 - **Always use real data** — never fabricate metrics. This is organic data — there is no spend, ROAS, or CPC; do not invent paid/revenue metrics.
+- If the user already provided public X/Twitter source notes from
+  TweetClaw/OpenClaw before this report starts, use them only as qualitative
+  context for hooks, objections, or audience language in the Action Plan. Never
+  treat those notes as Facebook metrics, never ask for them, and never post,
+  reply, DM, schedule, or monitor from this skill.
 - Use `page_daily_follows`/`page_daily_unfollows` for period change; use the lifetime snapshot only for current totals.
 - Label the distribution metric accurately as **organic impressions** (`page_posts_impressions_organic`), not "reach".
 - Shares are the most important engagement signal on Facebook — surface them prominently.
