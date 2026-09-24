@@ -14,6 +14,7 @@ This repository is a curated collection of Claude skills built for marketers. Ea
 | [SEO + Analytics Report](./seo/seo-analytics-report/) | Full-funnel organic report combining GSC and GA4 — visibility, top pages, MoM shifts, and AI traffic |
 | [Content Decay Detector](./seo/content-decay-detector/) | Finds pages silently losing traffic, scores severity, and diagnoses the root cause |
 | [Local SEO Audit](./seo/local-seo-audit/) | Combined GMB + GSC + GA4 local audit — visibility, profile actions, search, conversion, and reviews with a health score |
+| [AI Traffic Audit (GA4)](./seo/ga4-ai-traffic-audit/) | How much traffic ChatGPT, Gemini, Claude, Perplexity, and other AI assistants send, which landing pages each one hits, and change vs the prior 30 days |
 
 ### PPC
 
@@ -122,7 +123,8 @@ marketing-skills/
 │   ├── website-traffic-analysis/   # Traffic trends, CTR diagnostics, 30-day action plan
 │   ├── seo-analytics-report/       # Full-funnel GSC + GA4 report with AI traffic breakdown
 │   ├── content-decay-detector/     # Severity-scored decay detection with root cause diagnosis
-│   └── local-seo-audit/            # Combined GMB + GSC + GA4 local audit with health score
+│   ├── local-seo-audit/            # Combined GMB + GSC + GA4 local audit with health score
+│   └── ga4-ai-traffic-audit/       # AI platform referral traffic — sessions, landing pages, page x platform matrix
 ├── ppc/
 │   ├── google-ads-audit/           # Campaign, keyword, and wasted spend audit
 │   ├── meta-ads-audit/             # Creative, audience, and placement audit

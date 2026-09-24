@@ -1,0 +1,61 @@
+{
+  "version": "1.0.0",
+  "notes": "GA4 connector combines multiple filters with AND, so AI sources cannot be OR-filtered server-side. Queries exclude the high-volume non-AI sources; references/build_dashboard.py classifies the remaining session sources into AI platforms. Titles must stay exactly as written - the renderer looks results up by title.",
+  "queries": [
+    {
+      "title": "AI Referral Source x Landing Page",
+      "connectorId": "ga4",
+      "metrics": ["sessions", "total_users", "engaged_sessions", "key_events", "user_engagement_duration"],
+      "dimensions": ["session_source", "landing_page"],
+      "filters": [
+        {"filterField": "session_source", "operator": "notEquals", "expression": "google"},
+        {"filterField": "session_source", "operator": "notEquals", "expression": "(direct)"},
+        {"filterField": "session_source", "operator": "notEquals", "expression": "bing"},
+        {"filterField": "session_source", "operator": "notEquals", "expression": "(not set)"}
+      ],
+      "sort": [{"sortField": "sessions", "direction": "desc"}],
+      "reportParams": null,
+      "date_spec": {"type": "last_n_days", "n": 30, "end_offset_days": 1}
+    },
+    {
+      "title": "AI Referral Daily Trend",
+      "connectorId": "ga4",
+      "metrics": ["sessions"],
+      "dimensions": ["date", "session_source"],
+      "filters": [
+        {"filterField": "session_source", "operator": "notEquals", "expression": "google"},
+        {"filterField": "session_source", "operator": "notEquals", "expression": "(direct)"},
+        {"filterField": "session_source", "operator": "notEquals", "expression": "bing"},
+        {"filterField": "session_source", "operator": "notEquals", "expression": "(not set)"}
+      ],
+      "sort": [],
+      "reportParams": null,
+      "date_spec": {"type": "last_n_days", "n": 30, "end_offset_days": 1}
+    },
+    {
+      "title": "Site Total",
+      "connectorId": "ga4",
+      "metrics": ["sessions", "total_users"],
+      "dimensions": [],
+      "filters": [],
+      "sort": [],
+      "reportParams": null,
+      "date_spec": {"type": "last_n_days", "n": 30, "end_offset_days": 1}
+    },
+    {
+      "title": "AI Referral Sources Previous Period",
+      "connectorId": "ga4",
+      "metrics": ["sessions", "total_users", "key_events"],
+      "dimensions": ["session_source"],
+      "filters": [
+        {"filterField": "session_source", "operator": "notEquals", "expression": "google"},
+        {"filterField": "session_source", "operator": "notEquals", "expression": "(direct)"},
+        {"filterField": "session_source", "operator": "notEquals", "expression": "bing"},
+        {"filterField": "session_source", "operator": "notEquals", "expression": "(not set)"}
+      ],
+      "sort": [],
+      "reportParams": null,
+      "date_spec": {"type": "previous_n_days", "n": 30, "offset_days": 31}
+    }
+  ]
+}
