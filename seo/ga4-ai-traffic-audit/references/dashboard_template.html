@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{PAGE_TITLE}}</title>
+<style>
+:root{
+  --bg:#f6f7f9; --card:#ffffff; --ink:#15171c; --ink2:#5b6270; --ink3:#8a909c; --line:#e6e8ec;
+  --accent:#e37400; --up:#12805c; --down:#c2410c; --heat:16,163,127; --tile:#ffffff; --tileline:#e6e8ec;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0f1115; --card:#171a20; --ink:#eef0f3; --ink2:#a9afba; --ink3:#767d8a; --line:#272b33;
+  --up:#34d399; --down:#fb923c; --tile:#ffffff; --tileline:#2e333c;
+}}
+:root[data-theme="dark"]{
+  --bg:#0f1115; --card:#171a20; --ink:#eef0f3; --ink2:#a9afba; --ink3:#767d8a; --line:#272b33;
+  --up:#34d399; --down:#fb923c; --tile:#ffffff; --tileline:#2e333c;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif}
+.wrap{max-width:1240px;margin:0 auto;padding:24px 16px 48px}
+header{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-bottom:20px}
+header .ga{width:44px;height:44px}
+header h1{margin:0;font-size:22px;letter-spacing:-.01em}
+header .sub{color:var(--ink2);font-size:13px}
+.meta{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.pill{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 11px;font-size:12px;color:var(--ink2);white-space:nowrap}
+.pill b{color:var(--ink);font-weight:600}
+.grid{display:grid;gap:14px}
+.kpis{grid-template-columns:repeat(auto-fit,minmax(190px,1fr));margin-bottom:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+.kpi .l{font-size:12px;color:var(--ink2);text-transform:uppercase;letter-spacing:.04em}
+.kpi .v{font-size:28px;font-weight:650;margin-top:4px;letter-spacing:-.02em}
+.kpi .d{font-size:12px;margin-top:2px;color:var(--ink3)}
+.up{color:var(--up)} .down{color:var(--down)}
+h2{font-size:15px;margin:0 0 4px} .hint{color:var(--ink3);font-size:12px;margin:0 0 12px}
+section{margin-top:14px}
+/* logos */
+.logo{flex:none;display:inline-grid;place-items:center;background:var(--tile);border:1px solid var(--tileline);border-radius:10px;overflow:hidden}
+.logo img{width:72%;height:72%;object-fit:contain;display:block}
+.logo .lt{font-weight:700;color:#fff;font-size:.9em;letter-spacing:-.02em}
+.logo.mono{border:none}
+/* platform cards */
+.plats{grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.plat{position:relative;overflow:hidden}
+.plat .top{display:flex;align-items:center;gap:12px}
+.plat .nm{font-weight:650;font-size:16px}
+.plat .srcs{font-size:11px;color:var(--ink3);word-break:break-all}
+.plat .big{font-size:26px;font-weight:650;margin:12px 0 2px;letter-spacing:-.02em}
+.bar{height:6px;border-radius:6px;background:var(--line);overflow:hidden;margin:8px 0 12px}
+.bar i{display:block;height:100%;border-radius:6px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;font-size:12px;color:var(--ink2)}
+.stats b{display:block;color:var(--ink);font-size:14px}
+.tp{margin-top:12px;border-top:1px dashed var(--line);padding-top:10px;font-size:12px}
+.tp div{display:flex;justify-content:space-between;gap:8px;padding:2px 0}
+.tp span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink2)}
+/* trend */
+.legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:10px;font-size:12px;color:var(--ink2)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+svg text{fill:var(--ink3);font-size:10px}
+.tip{position:fixed;pointer-events:none;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:12px;box-shadow:0 6px 24px rgba(0,0,0,.12);display:none;z-index:9}
+/* matrix */
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:4px 10px 4px 4px;font-size:12px;cursor:pointer}
+.chip.on{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:separate;border-spacing:0;width:100%;font-size:13px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th{font-size:11px;color:var(--ink2);font-weight:600;position:sticky;top:0;background:var(--card)}
+th.pg,td.pg{text-align:left;position:sticky;left:0;background:var(--card);max-width:360px;overflow:hidden;text-overflow:ellipsis}
+th .logo{margin:0 auto}
+td.h{font-variant-numeric:tabular-nums}
+td.z{color:var(--ink3)}
+.src{display:flex;gap:4px;align-items:center;justify-content:flex-start}
+.more{font-size:11px;color:var(--ink3);margin-left:2px}
+th,td{padding:8px 8px}
+.foot{margin-top:18px;color:var(--ink3);font-size:12px}
+.empty{padding:28px;text-align:center;color:var(--ink2)}
+@media (max-width:640px){ .meta{margin-left:0} .kpi .v{font-size:24px} th.pg,td.pg{max-width:180px} }
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<div class="tip" id="tip"></div>
+<script>
+const D = /*__DATA__*/null;
+const $ = (h)=>{const t=document.createElement('template');t.innerHTML=h.trim();return t.content.firstChild};
+const n = (v)=>Math.round(v).toLocaleString();
+const pct = (v,d=1)=>(v*100).toFixed(d)+'%';
+const esc = (s)=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const delta = (cur,prev)=>{ if(!prev) return cur? '<span class="up">new</span>' : '—';
+  const c=(cur-prev)/prev; return `<span class="${c>=0?'up':'down'}">${c>=0?'▲':'▼'} ${Math.abs(c*100).toFixed(0)}%</span>`; };
+const P = Object.fromEntries(D.platforms.map(p=>[p.id,p]));
+function logo(p,size=32){
+  if(p.logo) return `<span class="logo" style="width:${size}px;height:${size}px" title="${esc(p.name)}"><img src="${p.logo}" alt="${esc(p.name)}"></span>`;
+  return `<span class="logo mono" style="width:${size}px;height:${size}px;background:${p.color};font-size:${size*0.42}px" title="${esc(p.name)}"><span class="lt">${esc(p.letter||p.name[0])}</span></span>`;
+}
+const app=document.getElementById('app'), K=D.kpis, M=D.meta;
+
+app.append($(`<header>
+  ${M.ga4_logo?`<img class="ga" src="${M.ga4_logo}" alt="Google Analytics 4">`:''}
+  <div><h1>AI Traffic Audit</h1><div class="sub">Which pages AI assistants send visitors to — and from which platform</div></div>
+  <div class="meta">
+    ${M.demo?`<span class="pill" style="border-color:var(--accent);color:var(--accent)"><b style="color:var(--accent)">Demo data</b></span>`:''}
+    <span class="pill">Property <b>${esc(M.account)}</b></span>
+    <span class="pill">Window <b>${esc(M.window)}</b></span>
+    ${M.compare?`<span class="pill">vs <b>${esc(M.compare)}</b></span>`:''}
+    <span class="pill">Run <b>${esc(M.run_time)}</b></span>
+  </div></header>`));
+
+app.append($(`<div class="grid kpis">
+  <div class="card kpi"><div class="l">AI sessions</div><div class="v">${n(K.ai_sessions)}</div><div class="d">${delta(K.ai_sessions,K.ai_prev_sessions)} vs prev (${n(K.ai_prev_sessions)})</div></div>
+  <div class="card kpi"><div class="l">Share of site sessions</div><div class="v">${pct(K.ai_share,2)}</div><div class="d">of ${n(K.site_sessions)} total sessions</div></div>
+  <div class="card kpi"><div class="l">AI users</div><div class="v">${n(K.ai_users)}</div><div class="d">total users from AI referrers</div></div>
+  <div class="card kpi"><div class="l">AI key events</div><div class="v">${n(K.ai_key_events)}</div><div class="d">${K.ai_sessions?(K.ai_key_events/K.ai_sessions).toFixed(2):'0'} per AI session</div></div>
+  <div class="card kpi"><div class="l">AI engagement rate</div><div class="v">${pct(K.ai_engagement_rate,0)}</div><div class="d">engaged ÷ AI sessions</div></div>
+</div>`));
+
+if(!D.platforms.length){ app.append($(`<div class="card empty">No sessions from known AI assistants in this window.</div>`)); }
+else {
+// platform leaderboard
+const sec=$(`<section><h2>AI platform leaderboard</h2><p class="hint">Sessions by assistant, share of AI traffic, change vs previous period, and the pages each one sends people to.</p><div class="grid plats"></div></section>`);
+const g=sec.querySelector('.plats');
+D.platforms.forEach(p=>{
+  g.append($(`<div class="card plat">
+   <div class="top">${logo(p,44)}<div><div class="nm">${esc(p.name)}</div><div class="srcs">${esc(p.sources.join(', ')||'no sessions this period')}</div></div></div>
+   <div class="big">${n(p.sessions)} <span style="font-size:13px;font-weight:500;color:var(--ink2)">sessions</span></div>
+   <div style="font-size:12px;color:var(--ink2)">${pct(p.share)} of AI traffic · ${delta(p.sessions,p.prev_sessions)}</div>
+   <div class="bar"><i style="width:${(p.share*100).toFixed(1)}%;background:${p.color}"></i></div>
+   <div class="stats"><div><b>${pct(p.engagement_rate,0)}</b>engaged</div><div><b>${n(p.key_events)}</b>key events</div><div><b>${Math.round(p.avg_eng_sec)}s</b>eng./user</div></div>
+   ${p.top_pages.length?`<div class="tp">${p.top_pages.map(t=>`<div><span title="${esc(t.page)}">${esc(t.page)}</span><b>${n(t.sessions)}</b></div>`).join('')}</div>`:''}
+  </div>`));
+});
+app.append(sec);
+
+// trend (stacked bars)
+const tr=$(`<section class="card"><h2>Daily AI sessions by platform</h2><p class="hint">Stacked by assistant. Hover a bar for the breakdown.</p><div class="legend"></div><div id="chart"></div></section>`);
+tr.querySelector('.legend').innerHTML=D.platforms.filter(p=>p.sessions).map(p=>`<span>${logo(p,18)}${esc(p.name)}</span>`).join('');
+app.append(tr);
+(function(){
+  const el=tr.querySelector('#chart'), T=D.trend, ids=D.platforms.map(p=>p.id);
+  if(!T.length){el.innerHTML='<div class="empty">No daily data.</div>';return;}
+  const W=Math.max(el.clientWidth||900,320),H=220,pl=34,pb=22,pt=8;
+  const tot=T.map(d=>ids.reduce((a,i)=>a+(d.by[i]||0),0)), mx=Math.max(1,...tot);
+  const mag=Math.pow(10,Math.floor(Math.log10(mx/4)||0)); const step=[1,2,2.5,5,10].map(m=>m*mag).find(v=>v*4>=mx)||mag*10; const top=step*4;
+  const bw=(W-pl)/T.length, y=v=>pt+(H-pt-pb)*(1-v/top);
+  let s=`<svg width="100%" viewBox="0 0 ${W} ${H}" role="img" aria-label="Daily AI sessions">`;
+  for(let k=0;k<=4;k++){const v=top*k/4;s+=`<line x1="${pl}" x2="${W}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${pl-6}" y="${y(v)+3}" text-anchor="end">${Math.round(v)}</text>`;}
+  T.forEach((d,i)=>{let acc=0;const x=pl+i*bw+bw*0.15,w=bw*0.7;
+    ids.forEach(id=>{const v=d.by[id]||0;if(!v)return;const y1=y(acc+v),y0=y(acc);acc+=v;
+      s+=`<rect x="${x}" y="${y1}" width="${w}" height="${Math.max(0,y0-y1-1)}" rx="2" fill="${P[id].color}"/>`;});
+    s+=`<rect class="hit" data-i="${i}" x="${pl+i*bw}" y="${pt}" width="${bw}" height="${H-pt-pb}" fill="transparent"/>`;
+    if(i%Math.ceil(T.length/8)===0) s+=`<text x="${x+w/2}" y="${H-6}" text-anchor="middle">${d.date.slice(5)}</text>`;
+  });
+  el.innerHTML=s+'</svg>';
+  const tip=document.getElementById('tip');
+  el.querySelectorAll('.hit').forEach(r=>{
+    r.addEventListener('mousemove',e=>{const d=T[+r.dataset.i];
+      tip.innerHTML=`<b>${d.date}</b><br>`+ids.filter(i=>d.by[i]).map(i=>`${P[i].name}: <b>${d.by[i]}</b>`).join('<br>');
+      tip.style.display='block';tip.style.left=Math.min(e.clientX+12,innerWidth-180)+'px';tip.style.top=(e.clientY+12)+'px';});
+    r.addEventListener('mouseleave',()=>tip.style.display='none');
+  });
+})();
+
+// page x platform matrix
+const act=D.platforms.filter(p=>p.sessions);
+const mx=$(`<section class="card"><h2>Pages × AI platforms</h2><p class="hint">Every landing page that received AI-assistant traffic. Cells show sessions; darker = more. Click a logo to filter.</p>
+  <div class="filters"></div><div class="scroll"><table><thead></thead><tbody></tbody></table></div></section>`);
+app.append(mx);
+let sel=null; const maxCell=Math.max(1,...D.pages.flatMap(p=>Object.values(p.by)));
+function drawMatrix(){
+  mx.querySelector('.filters').innerHTML=`<button class="chip ${sel?'':'on'}" data-id="">All platforms</button>`+
+    act.map(p=>`<button class="chip ${sel===p.id?'on':''}" data-id="${p.id}">${logo(p,22)}${esc(p.name)}</button>`).join('');
+  mx.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{sel=b.dataset.id||null;drawMatrix();});
+  mx.querySelector('thead').innerHTML=`<tr><th class="pg">Landing page</th><th style="text-align:left">Top sources</th>${act.map(p=>`<th title="${esc(p.name)}">${logo(p,26)}</th>`).join('')}<th>AI sessions</th><th>Key events</th><th>Eng. rate</th></tr>`;
+  const rows=D.pages.filter(r=>!sel||r.by[sel]).sort((a,b)=>sel?(b.by[sel]||0)-(a.by[sel]||0):b.total-a.total);
+  mx.querySelector('tbody').innerHTML=rows.map(r=>{
+    const ent=Object.entries(r.by).sort((a,b)=>b[1]-a[1]); const srcs=ent.slice(0,3).map(([id])=>logo(P[id],22)).join('')+(ent.length>3?`<span class="more">+${ent.length-3}</span>`:'');
+    return `<tr><td class="pg" title="${esc(r.page)}">${esc(r.page)}</td><td><div class="src">${srcs}</div></td>`+
+      act.map(p=>{const v=r.by[p.id]||0;if(!v)return '<td class="h z">·</td>';
+        const a=0.12+0.78*Math.sqrt(v/maxCell);return `<td class="h" style="background:color-mix(in srgb, ${p.color} ${Math.round(a*100)}%, transparent);color:${a>0.55?'#fff':'inherit'}">${n(v)}</td>`;}).join('')+
+      `<td class="h"><b>${n(r.total)}</b></td><td class="h">${n(r.key_events)}</td><td class="h">${pct(r.engagement_rate,0)}</td></tr>`;
+  }).join('');
+}
+drawMatrix();
+}
+app.append($(`<div class="foot">Source: Google Analytics 4 via Two Minute Reports · AI traffic = sessions whose GA4 session source matches a known AI-assistant referrer (ChatGPT, Gemini, Claude, Perplexity, Copilot, Meta AI, Grok, DeepSeek, Mistral, Poe, You.com). Assistants that strip referrers show up as (direct) and are not counted.</div>`));
+</script>
+</body>
+</html>
