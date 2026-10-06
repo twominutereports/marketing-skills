@@ -1,0 +1,721 @@
+{
+  "version": "1.0.0",
+  "batches": {
+    "core": {
+      "limit": 250
+    },
+    "ai": {
+      "limit": 5000
+    }
+  },
+  "queries": [
+    {
+      "title": "GSC KPIs - Current",
+      "tab": "gsc",
+      "batch": "core",
+      "connectorId": "gsc",
+      "metrics": [
+        "clicks",
+        "impressions",
+        "ctr",
+        "position"
+      ],
+      "dimensions": [],
+      "filters": [],
+      "sort": [],
+      "date_spec": {
+        "type": "last_n_days",
+        "n": 28,
+        "lag_days": 3
+      }
+    },
+    {
+      "title": "GSC KPIs - Previous",
+      "tab": "gsc",
+      "batch": "core",
+      "connectorId": "gsc",
+      "metrics": [
+        "clicks",
+        "impressions",
+        "ctr",
+        "position"
+      ],
+      "dimensions": [],
+      "filters": [],
+      "sort": [],
+      "date_spec": {
+        "type": "previous_n_days",
+        "n": 28,
+        "offset_days": 28,
+        "lag_days": 3
+      }
+    },
+    {
+      "title": "GSC Daily Trend",
+      "tab": "gsc",
+      "batch": "core",
+      "connectorId": "gsc",
+      "metrics": [
+        "clicks",
+        "impressions",
+        "ctr",
+        "position"
+      ],
+      "dimensions": [
+        "date"
+      ],
+      "filters": [],
+      "sort": [
+        {
+          "sortField": "date",
+          "direction": "asc"
+        }
+      ],
+      "date_spec": {
+        "type": "last_n_days",
+        "n": 28,
+        "lag_days": 3
+      }
+    },
+    {
+      "title": "GSC Top Queries",
+      "tab": "gsc",
+      "batch": "core",
+      "connectorId": "gsc",
+      "metrics": [
+        "clicks",
+        "impressions",
+        "ctr",
+        "position"
+      ],
+      "dimensions": [
+        "query"
+      ],
+      "filters": [],
+      "sort": [
+        {
+          "sortField": "impressions",
+          "direction": "desc"
+        }
+      ],
+      "date_spec": {
+        "type": "last_n_days",
+        "n": 28,
+        "lag_days": 3
+      }
+    },
+    {
+      "title": "GSC Top Pages",
+      "tab": "gsc",
+      "batch": "core",
+      "connectorId": "gsc",
+      "metrics": [
+        "clicks",
+        "impressions",
+        "ctr",
+        "position"
+      ],
+      "dimensions": [
+        "page"
+      ],
+      "filters": [],
+      "sort": [
+        {
+          "sortField": "clicks",
+          "direction": "desc"
+        }
+      ],
+      "date_spec": {
+        "type": "last_n_days",
+        "n": 28,
+        "lag_days": 3
+      }
+    },
+    {
+      "title": "GSC Device Split",
+      "tab": "gsc",
+      "batch": "core",
+      "connectorId": "gsc",
+      "metrics": [
+        "clicks",
+        "impressions",
+        "ctr",
+        "position"
+      ],
+      "dimensions": [
+        "device"
+      ],
+      "filters": [],
+      "sort": [],
+      "date_spec": {
+        "type": "last_n_days",
+        "n": 28,
+        "lag_days": 3
+      }
+    },
+    {
+      "title": "GA4 KPIs - Current",
+      "tab": "ga4",
+      "batch": "core",
+      "connectorId": "ga4",
+      "metrics": [
+        "sessions",
+        "total_users",
+        "new_users",
+        "engaged_sessions",
+        "engagement_rate",
+        "average_session_duration",
+        "key_events",
+        "bounce_rate"
+      ],
+      "dimensions": [],
+      "filters": [],
+      "sort": [],
+      "date_spec": {
+        "type": "last_n_days",
+        "n": 28,
+        "lag_days": 1
+      }
+    },
+    {
+      "title": "GA4 KPIs - Previous",
+      "tab": "ga4",
+      "batch": "core",
+      "connectorId": "ga4",
+      "metrics": [
+        "sessions",
+        "total_users",
+        "new_users",
+        "engaged_sessions",
+        "engagement_rate",
+        "average_session_duration",
+        "key_events",
+        "bounce_rate"
+      ],
+      "dimensions": [],
+      "filters": [],
+      "sort": [],
+      "date_spec": {
+        "type": "previous_n_days",
+        "n": 28,
+        "offset_days": 28,
+        "lag_days": 1
+      }
+    },
+    {
+      "title": "GA4 Daily Trend",
+      "tab": "ga4",
+      "batch": "core",
+      "connectorId": "ga4",
+      "metrics": [
+        "sessions",
+        "total_users",
+        "key_events"
+      ],
+      "dimensions": [
+        "date"
+      ],
+      "filters": [],
+      "sort": [
+        {
+          "sortField": "date",
+          "direction": "asc"
+        }
+      ],
+      "date_spec": {
+        "type": "last_n_days",
+        "n": 28,
+        "lag_days": 1
+      }
+    },
+    {
+      "title": "GA4 Channel Mix",
+      "tab": "ga4",
+      "batch": "core",
+      "connectorId": "ga4",
+      "metrics": [
+        "sessions",
+        "total_users",
+        "engagement_rate",
+        "key_events"
+      ],
+      "dimensions": [
+        "session_default_channel_grouping"
+      ],
+      "filters": [],
+      "sort": [
+        {
+          "sortField": "sessions",
+          "direction": "desc"
+        }
+      ],
+      "date_spec": {
+        "type": "last_n_days",
+        "n": 28,
+        "lag_days": 1
+      }
+    },
+    {
+      "title": "GA4 Organic Landing Pages",
+      "tab": "ga4",
+      "batch": "core",
+      "connectorId": "ga4",
+      "metrics": [
+        "sessions",
+        "engagement_rate",
+        "key_events",
+        "average_session_duration"
+      ],
+      "dimensions": [
+        "landing_page"
+      ],
+      "filters": [
+        {
+          "filterField": "session_default_channel_grouping",
+          "operator": "equals",
+          "expression": "Organic Search"
+        }
+      ],
+      "sort": [
+        {
+          "sortField": "sessions",
+          "direction": "desc"
+        }
+      ],
+      "date_spec": {
+        "type": "last_n_days",
+        "n": 28,
+        "lag_days": 1
+      }
+    },
+    {
+      "title": "GA4 AI Sources - Current",
+      "tab": "ai",
+      "batch": "ai",
+      "connectorId": "ga4",
+      "metrics": [
+        "sessions",
+        "total_users",
+        "engaged_sessions",
+        "engagement_rate",
+        "key_events",
+        "average_session_duration"
+      ],
+      "dimensions": [
+        "session_source",
+        "session_medium"
+      ],
+      "filters": [
+        {
+          "filterField": "session_source",
+          "operator": "notEquals",
+          "expression": "google"
+        },
+        {
+          "filterField": "session_source",
+          "operator": "notEquals",
+          "expression": "(direct)"
+        }
+      ],
+      "sort": [
+        {
+          "sortField": "sessions",
+          "direction": "desc"
+        }
+      ],
+      "date_spec": {
+        "type": "last_n_days",
+        "n": 28,
+        "lag_days": 1
+      }
+    },
+    {
+      "title": "GA4 AI Sources - Previous",
+      "tab": "ai",
+      "batch": "ai",
+      "connectorId": "ga4",
+      "metrics": [
+        "sessions",
+        "total_users",
+        "engaged_sessions",
+        "engagement_rate",
+        "key_events",
+        "average_session_duration"
+      ],
+      "dimensions": [
+        "session_source",
+        "session_medium"
+      ],
+      "filters": [
+        {
+          "filterField": "session_source",
+          "operator": "notEquals",
+          "expression": "google"
+        },
+        {
+          "filterField": "session_source",
+          "operator": "notEquals",
+          "expression": "(direct)"
+        }
+      ],
+      "sort": [
+        {
+          "sortField": "sessions",
+          "direction": "desc"
+        }
+      ],
+      "date_spec": {
+        "type": "previous_n_days",
+        "n": 28,
+        "offset_days": 28,
+        "lag_days": 1
+      }
+    },
+    {
+      "title": "GA4 AI Landing Pages",
+      "tab": "ai",
+      "batch": "ai",
+      "connectorId": "ga4",
+      "metrics": [
+        "sessions",
+        "engaged_sessions",
+        "key_events"
+      ],
+      "dimensions": [
+        "session_source",
+        "session_medium",
+        "landing_page"
+      ],
+      "filters": [
+        {
+          "filterField": "session_source",
+          "operator": "notEquals",
+          "expression": "google"
+        },
+        {
+          "filterField": "session_source",
+          "operator": "notEquals",
+          "expression": "(direct)"
+        }
+      ],
+      "sort": [
+        {
+          "sortField": "sessions",
+          "direction": "desc"
+        }
+      ],
+      "date_spec": {
+        "type": "last_n_days",
+        "n": 28,
+        "lag_days": 1
+      }
+    },
+    {
+      "title": "GA4 AI Daily Trend",
+      "tab": "ai",
+      "batch": "ai",
+      "connectorId": "ga4",
+      "metrics": [
+        "sessions"
+      ],
+      "dimensions": [
+        "date",
+        "session_source",
+        "session_medium"
+      ],
+      "filters": [
+        {
+          "filterField": "session_source",
+          "operator": "notEquals",
+          "expression": "google"
+        },
+        {
+          "filterField": "session_source",
+          "operator": "notEquals",
+          "expression": "(direct)"
+        }
+      ],
+      "sort": [
+        {
+          "sortField": "date",
+          "direction": "asc"
+        }
+      ],
+      "date_spec": {
+        "type": "last_n_days",
+        "n": 28,
+        "lag_days": 1
+      }
+    },
+    {
+      "title": "CrUX Field Data - Mobile",
+      "tab": "psi",
+      "batch": "core",
+      "connectorId": "psi",
+      "metrics": [
+        "largest_contentful_paint",
+        "interaction_to_next_paint",
+        "cumulative_layout_shift",
+        "first_contentful_paint",
+        "experimental_time_to_first_byte"
+      ],
+      "dimensions": [],
+      "filters": [],
+      "sort": [],
+      "reportParams": {
+        "psiApiMethod": "crux",
+        "urls": "{{PSI_ORIGIN}}",
+        "urlType": "origin",
+        "psiConnectionType": "origin",
+        "psiFormFactor": "mobile"
+      },
+      "date_spec": {
+        "type": "last_n_days",
+        "n": 28,
+        "lag_days": 1
+      }
+    },
+    {
+      "title": "CrUX Field Data - Desktop",
+      "tab": "psi",
+      "batch": "core",
+      "connectorId": "psi",
+      "metrics": [
+        "largest_contentful_paint",
+        "interaction_to_next_paint",
+        "cumulative_layout_shift",
+        "first_contentful_paint",
+        "experimental_time_to_first_byte"
+      ],
+      "dimensions": [],
+      "filters": [],
+      "sort": [],
+      "reportParams": {
+        "psiApiMethod": "crux",
+        "urls": "{{PSI_ORIGIN}}",
+        "urlType": "origin",
+        "psiConnectionType": "origin",
+        "psiFormFactor": "desktop"
+      },
+      "date_spec": {
+        "type": "last_n_days",
+        "n": 28,
+        "lag_days": 1
+      }
+    },
+    {
+      "title": "Lighthouse Audit - Mobile",
+      "tab": "psi",
+      "batch": "core",
+      "connectorId": "psi",
+      "metrics": [
+        "performance",
+        "seo",
+        "accessibility",
+        "best_practices",
+        "largest_contentful_paint",
+        "cumulative_layout_shift",
+        "total_blocking_time",
+        "first_contentful_paint",
+        "speed_index",
+        "server_response_time"
+      ],
+      "dimensions": [],
+      "filters": [],
+      "sort": [],
+      "reportParams": {
+        "psiApiMethod": "psi",
+        "urls": "{{PSI_URL}}",
+        "strategy": "mobile",
+        "psiFormFactor": "mobile",
+        "urlType": "url",
+        "psiConnectionType": "url"
+      },
+      "date_spec": {
+        "type": "last_n_days",
+        "n": 1,
+        "lag_days": 0
+      }
+    },
+    {
+      "title": "Lighthouse Audit - Desktop",
+      "tab": "psi",
+      "batch": "core",
+      "connectorId": "psi",
+      "metrics": [
+        "performance",
+        "seo",
+        "accessibility",
+        "best_practices",
+        "largest_contentful_paint",
+        "cumulative_layout_shift",
+        "total_blocking_time",
+        "first_contentful_paint",
+        "speed_index",
+        "server_response_time"
+      ],
+      "dimensions": [],
+      "filters": [],
+      "sort": [],
+      "reportParams": {
+        "psiApiMethod": "psi",
+        "urls": "{{PSI_URL}}",
+        "strategy": "desktop",
+        "psiFormFactor": "desktop",
+        "urlType": "url",
+        "psiConnectionType": "url"
+      },
+      "date_spec": {
+        "type": "last_n_days",
+        "n": 1,
+        "lag_days": 0
+      }
+    },
+    {
+      "title": "GBP KPIs - Current",
+      "tab": "gbp",
+      "batch": "core",
+      "connectorId": "gmb",
+      "metrics": [
+        "views_total",
+        "views_search",
+        "views_maps",
+        "actions_website",
+        "actions_phone",
+        "actions_driving_directions",
+        "actions_total"
+      ],
+      "dimensions": [
+        "location_name"
+      ],
+      "filters": [],
+      "sort": [],
+      "date_spec": {
+        "type": "last_n_days",
+        "n": 28,
+        "lag_days": 1
+      }
+    },
+    {
+      "title": "GBP KPIs - Previous",
+      "tab": "gbp",
+      "batch": "core",
+      "connectorId": "gmb",
+      "metrics": [
+        "views_total",
+        "views_search",
+        "views_maps",
+        "actions_website",
+        "actions_phone",
+        "actions_driving_directions",
+        "actions_total"
+      ],
+      "dimensions": [
+        "location_name"
+      ],
+      "filters": [],
+      "sort": [],
+      "date_spec": {
+        "type": "previous_n_days",
+        "n": 28,
+        "offset_days": 28,
+        "lag_days": 1
+      }
+    },
+    {
+      "title": "GBP Daily Trend",
+      "tab": "gbp",
+      "batch": "core",
+      "connectorId": "gmb",
+      "metrics": [
+        "views_search",
+        "views_maps",
+        "actions_total"
+      ],
+      "dimensions": [
+        "date"
+      ],
+      "filters": [],
+      "sort": [
+        {
+          "sortField": "date",
+          "direction": "asc"
+        }
+      ],
+      "date_spec": {
+        "type": "last_n_days",
+        "n": 28,
+        "lag_days": 1
+      }
+    },
+    {
+      "title": "GBP Search Keywords",
+      "tab": "gbp",
+      "batch": "core",
+      "connectorId": "gmb",
+      "metrics": [
+        "monthly_search_impressions"
+      ],
+      "dimensions": [
+        "search_terms"
+      ],
+      "filters": [],
+      "sort": [
+        {
+          "sortField": "monthly_search_impressions",
+          "direction": "desc"
+        }
+      ],
+      "date_spec": {
+        "type": "last_n_days",
+        "n": 28,
+        "lag_days": 1
+      }
+    },
+    {
+      "title": "GBP Reviews Summary",
+      "tab": "gbp",
+      "batch": "core",
+      "connectorId": "gmb",
+      "metrics": [
+        "total_review_count",
+        "total_review_star_rating"
+      ],
+      "dimensions": [
+        "location_name"
+      ],
+      "filters": [],
+      "sort": [],
+      "date_spec": {
+        "type": "last_n_days",
+        "n": 28,
+        "lag_days": 1
+      }
+    },
+    {
+      "title": "GBP Recent Reviews",
+      "tab": "gbp",
+      "batch": "core",
+      "connectorId": "gmb",
+      "metrics": [],
+      "dimensions": [
+        "review_star_rating",
+        "review_create_date",
+        "review_comment",
+        "review_reply_comment"
+      ],
+      "filters": [],
+      "sort": [
+        {
+          "sortField": "review_create_date",
+          "direction": "desc"
+        }
+      ],
+      "date_spec": {
+        "type": "last_n_days",
+        "n": 28,
+        "lag_days": 1
+      }
+    }
+  ]
+}
