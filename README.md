@@ -51,15 +51,56 @@ This repository is a curated collection of Claude skills built for marketers. Ea
 
 **Prerequisites**
 
-- Claude.ai Pro, Team, or Enterprise account
-- [Two Minute Reports](https://twominutereports.com) MCP connected in Claude Settings
-- The relevant data source (Google Analytics, Search Console, etc.) linked within Two Minute Reports
+- A [Two Minute Reports](https://twominutereports.com) account, with the data source the skill
+  needs (Google Ads, GA4, Search Console and so on) connected in it
+- An AI tool that runs skills: Claude (Pro, Max, Team or Enterprise), Claude Code, Codex, or
+  ChatGPT (Business, Enterprise, Edu or Healthcare)
 
-### Claude Code — one install for everything (recommended)
+Skills are also built into Dash, the assistant inside Two Minute Reports, with nothing to install.
 
-This repository is also a Claude Code plugin marketplace. Installing the plugin adds
-**all** the skills *and* connects the Two Minute Reports MCP server, so there's no
-separate MCP setup step:
+### Claude (claude.ai, desktop and mobile): one plugin for everything (recommended)
+
+This repository is a plugin marketplace. Adding it installs **every** skill *and* the Two Minute
+Reports connector, and it can keep itself up to date:
+
+1. Open [Customize › Plugins](https://claude.ai/customize/plugins)
+2. Select **Add**, then **Add marketplace**, and enter `twominutereports/marketing-skills`
+3. Under **Discover**, find `tmr-marketing-skills` and select **Add**
+4. Turn on **Sync automatically** for the marketplace, so new and improved skills reach you
+5. Ask, e.g. *"Audit my Google Ads account"*, or type `/` and choose a skill
+
+Plugins added here also reach Claude Code on the same account. If you already added Two Minute
+Reports to Claude, keep it; nothing needs removing.
+
+**Only want one skill?** Download it from the
+[Skills tab in the Two Minute Reports Hub](https://hub.twominutereports.com/ai-tools/skills)
+(its Download builds the zip), then in [Customize › Skills](https://claude.ai/customize/skills)
+select **+** › **Create skill** › **Upload a skill** and choose the zip. A skill added this way
+doesn't update itself.
+
+> **Upload the folder, not just `skill.md`.** Most skills read
+> `references/thresholds.md` for their scoring benchmarks; with only the markdown
+> file those instructions point at nothing and the scores get invented. The file must
+> also be named `SKILL.md` (uppercase), which is the name Claude looks for.
+
+### ChatGPT: upload each skill
+
+Skills are on ChatGPT Business, Enterprise, Edu and Healthcare plans, and ChatGPT takes one skill
+at a time:
+
+1. Download the skill's zip from the
+   [Skills tab in the Two Minute Reports Hub](https://hub.twominutereports.com/ai-tools/skills)
+2. In ChatGPT, open **Plugins** in the sidebar, then the **Skills** tab
+3. Select **Create**, then **Upload from your computer**, and choose the zip
+4. Connect Two Minute Reports in ChatGPT too, if you haven't
+5. Ask, e.g. *"Audit my Google Ads account"*
+
+An uploaded skill doesn't update itself. For a newer version, download and upload it again.
+
+### Claude Code
+
+Added the plugin in Claude already? It syncs to Claude Code (v2.1.273 or later), so skip this.
+Otherwise, in Claude Code:
 
 ```
 /plugin marketplace add twominutereports/marketing-skills
@@ -67,40 +108,25 @@ separate MCP setup step:
 /reload-plugins
 ```
 
-Then just ask — e.g. *"Audit my Google Ads account"*.
+That adds every skill and connects the Two Minute Reports MCP server. Then ask, or type
+`/tmr-marketing-skills:` and choose a skill.
 
-Copying a skill folder into `~/.claude/skills/` by hand still works and always has.
-Installing from the marketplace is recommended for one reason: a copied folder never
-updates. When a skill improves here, marketplace installs can be refreshed
-(`/plugin marketplace update marketing-skills`); a hand-copied one keeps running the
-version you downloaded until you notice and replace it.
+Claude Code doesn't update plugins from third-party marketplaces by itself. To get new skills, run
+`/plugin marketplace update marketing-skills`. Copying a skill folder into `~/.claude/skills/` by
+hand also works, but a copied folder never updates.
 
-### Claude (claude.ai) — upload the skill folder
+### Codex
 
-1. Download the skill's **whole folder** as a zip, with `SKILL.md` at its root.
-   The easiest way is the [Skills tab in the TMR hub](https://app.twominutereports.com/mcp?tab=skills),
-   whose Download button builds exactly that zip for you.
-2. Go to [claude.ai/customize/skills](https://claude.ai/customize/skills)
-3. Click the **+** icon → **Create skill** → **Upload a skill**
-4. Select the zip
-5. Start chatting — each skill's README lists the trigger phrases you can use
-
-> **Upload the folder, not just `skill.md`.** Most skills read
-> `references/thresholds.md` for their scoring benchmarks; with only the markdown
-> file those instructions point at nothing and the scores get invented. The file must
-> also be named `SKILL.md` (uppercase) — that's the name Claude looks for.
-
-### ChatGPT — upload the skill folder
-
-Same zip. In ChatGPT: **Customize → Skills → + → Create Skill → Upload a Skill**.
-Skills are available on ChatGPT Business, Enterprise, Edu and Healthcare plans.
-
-### Codex CLI
+Codex reads skills from `~/.agents/skills`. This copies every skill there:
 
 ```
-git clone https://github.com/twominutereports/marketing-skills ~/.codex/skills/tmr-marketing-skills
-codex --enable skills
+cd "$(mktemp -d)" && git clone --depth 1 https://github.com/twominutereports/marketing-skills . && mkdir -p ~/.agents/skills && cp -R plugins/tmr-marketing-skills/skills/. ~/.agents/skills/
 ```
+
+Codex also needs the Two Minute Reports MCP server
+(`codex mcp add two-minute-reports --url https://mcp.twominutereports.com/mcp`, then
+`codex mcp login two-minute-reports`). Then ask, or type `$` and choose a skill. Codex picks up
+new skills on its own; if one doesn't show, restart it. To update, run the copy command again.
 
 ## Plugin build (maintainers)
 
