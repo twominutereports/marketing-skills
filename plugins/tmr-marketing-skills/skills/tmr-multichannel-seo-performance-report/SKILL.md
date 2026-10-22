@@ -23,7 +23,7 @@ Typical requests: "SEO performance report", "monthly SEO report for my site", "h
 This skill uses these TMR connectors:
 - Google Search Console (`gsc`): required
 - Google Analytics 4 (`ga4`): required
-- Page Speed Insights (`psi`): required. **The URL to test must come from the user on every run (or from their saved config). Never guess, infer or derive it from another connector.**
+- PageSpeed Insights (`psi`): required. **The URL to test must come from the user on every run (or from their saved config). Never guess, infer or derive it from another connector.**
 - Google My Business / Business Profile (`gmb`): **optional**. If the user has no enabled GMB account, run the other four tabs; the Business Profile tab then shows a "connect Google Business Profile" note.
 
 Pass `skillId: "tmr-multichannel-seo-performance-report"` on every `validate_query` and `run_query` call.
