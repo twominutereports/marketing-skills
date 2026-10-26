@@ -1,6 +1,6 @@
 # Google Ads Auditor — Claude Skill
 
-A Claude skill that acts as your senior Google Ads performance consultant. Connect it to your Google Ads account via Two Minute Reports and get a full audit across campaigns, keywords, search terms, budget allocation, and wasted spend — delivered as a scored HTML report with a prioritised action plan.
+A Claude skill that acts as your senior Google Ads performance consultant. Connect it to your Google Ads account via Two Minute Reports and get a full audit across campaigns, keywords, search terms, budget allocation, and wasted spend — delivered as a scored HTML report with a prioritized action plan.
 
 ## Requirements & Setup
 
@@ -34,7 +34,7 @@ Claude will pull your live Google Ads data and deliver the full audit automatica
 | Budget Allocation Audit      | Whether spend is weighted toward your best-performing campaigns and where it's misallocated     |
 | Keyword Audit                | Top and bottom keywords by CPA and ROAS, including quality score issues                         |
 | Search Terms Audit           | Irrelevant search terms triggering spend and negative keyword opportunities                     |
-| Prioritised Action Plan      | Ranked fixes ordered by impact — the highest-leverage changes first                             |
+| Prioritized Action Plan      | Ranked fixes ordered by impact — the highest-leverage changes first                             |
 
 ---
 

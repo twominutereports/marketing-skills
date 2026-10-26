@@ -1,6 +1,6 @@
 # Content Decay Detector — Claude Skill
 
-A Claude skill that identifies pages on your website that are silently losing traffic. It compares the last 30 days against the prior period across both Google Search Console and GA4, scores each declining page by severity, diagnoses the root cause, and delivers a prioritised action list alongside a full HTML dashboard.
+A Claude skill that identifies pages on your website that are silently losing traffic. It compares the last 30 days against the prior period across both Google Search Console and GA4, scores each declining page by severity, diagnoses the root cause, and delivers a prioritized action list alongside a full HTML dashboard.
 
 ## Requirements & Setup
 
@@ -32,7 +32,7 @@ Claude will pull your GSC and GA4 data, score every candidate page, and deliver 
 | Severity Scoring          | Each page scored 0–100 across clicks, sessions, impressions, and position                           |
 | Root Cause Diagnosis      | Case-matched to Visibility Loss, SERP Issue, Tracking Mismatch, or Engagement Decay                 |
 | Tracking Mismatch Flag    | Pages where GSC clicks are stable but GA4 sessions dropped — flagged before content action is taken |
-| HTML Dashboard            | Full decay table with severity colour-coding, root cause pills, and a recommended actions panel     |
+| HTML Dashboard            | Full decay table with severity color-coding, root cause pills, and a recommended actions panel     |
 | Pattern Observation       | Whether a single root cause dominates, or decay is spread across types and URL clusters             |
 | Priority Action           | One concrete next step tied to the highest-severity finding                                         |
 

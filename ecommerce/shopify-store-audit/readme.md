@@ -1,6 +1,6 @@
 # Shopify Store Auditor — Claude Skill
 
-A Claude skill that acts as your senior ecommerce CRO consultant. Connect it to your Shopify store via Two Minute Reports and get a full audit across your conversion funnel, checkout friction, product performance, traffic sources, and cart abandonment — delivered as a scored HTML report with a prioritised action plan.
+A Claude skill that acts as your senior ecommerce CRO consultant. Connect it to your Shopify store via Two Minute Reports and get a full audit across your conversion funnel, checkout friction, product performance, traffic sources, and cart abandonment — delivered as a scored HTML report with a prioritized action plan.
 
 ## Requirements & Setup
 
@@ -36,7 +36,7 @@ Claude will pull your live Shopify data and deliver the full audit automatically
 | Traffic Source Audit      | Which channels drive sessions, revenue, and the highest-quality buyers  |
 | Cart Abandonment Audit    | Abandonment rate, recovery rate, and top reasons carts are left behind  |
 | Geographic & Device Audit | Revenue and conversion breakdown by country and device type             |
-| Prioritised Action Plan   | Ranked fixes ordered by revenue impact — the highest-value levers first |
+| Prioritized Action Plan   | Ranked fixes ordered by revenue impact — the highest-value levers first |
 
 ---
 

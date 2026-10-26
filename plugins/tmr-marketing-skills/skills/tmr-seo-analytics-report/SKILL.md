@@ -147,7 +147,7 @@ Write a 150–300 word insights summary inline in chat. Structure:
 
 1. **Headline finding** — what's the single most important thing the user should know about their organic performance?
 2. **Search visibility** — key GSC numbers (impressions, clicks, CTR, avg position) and what they indicate.
-3. **On-site behaviour** — GA4 sessions, users, key events, bounce rate and what they mean together.
+3. **On-site behavior** — GA4 sessions, users, key events, bounce rate and what they mean together.
 4. **Top pages** — which pages are driving the most value (clicks, sessions, conversions)?
 5. **MoM shifts** — which landing pages are growing or declining, and by how much?
 6. **AI traffic** — which AI platform is sending the most traffic, and is it converting?
@@ -157,7 +157,7 @@ Match the tone, voice, structure, and rhythm of this sanitized template. Replace
 
 ---
 
-*Organic performance over the last [reporting period] shows [X] impressions and [N] clicks from Google Search Console, at an average CTR of [Y%] and average position [P]. [Positive/negative framing based on benchmarks — e.g. "CTR is below the [X%] threshold typical for position [P], suggesting title and meta description optimisation could unlock meaningful click gains."].*
+*Organic performance over the last [reporting period] shows [X] impressions and [N] clicks from Google Search Console, at an average CTR of [Y%] and average position [P]. [Positive/negative framing based on benchmarks — e.g. "CTR is below the [X%] threshold typical for position [P], suggesting title and meta description optimization could unlock meaningful click gains."].*
 
 *On-site, GA4 recorded [N] sessions and [N] total users, with [N] key events and a [Y%] bounce rate. [Interpretation — e.g. "Bounce rate is [above/below] the [X%] benchmark for organic traffic, indicating [strong/weak] content-to-intent match."].*
 
@@ -167,7 +167,7 @@ Match the tone, voice, structure, and rhythm of this sanitized template. Replace
 
 *AI referrals totalled [N] sessions across [N] platforms. [Top AI source] led with [N] sessions and [N] key events — [interpretation, e.g. "the highest conversion rate among AI sources, suggesting strong brand-content alignment with that platform's audience"]. Overall AI traffic is [growing/steady/small] as a share of organic.*
 
-*Recommended action: [one specific, actionable next step based on the data — e.g. "Prioritise improving the meta title for [top impression page] — it has [N] impressions but only [Y%] CTR, meaning small copy improvements could drive significant click volume without any ranking work."].*
+*Recommended action: [one specific, actionable next step based on the data — e.g. "Prioritize improving the meta title for [top impression page] — it has [N] impressions but only [Y%] CTR, meaning small copy improvements could drive significant click volume without any ranking work."].*
 
 ---
 

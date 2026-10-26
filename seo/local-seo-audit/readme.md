@@ -1,6 +1,6 @@
 # Local SEO Auditor — Claude Skill
 
-A Claude skill that acts as your senior Local SEO consultant. It combines three Google sources via Two Minute Reports — Google Business Profile (GMB), Search Console (GSC), and Analytics 4 (GA4) — into one unified audit that follows the local customer journey: get found → take an action → land on the site → convert. Delivered as an HTML report with a Local SEO health score and a prioritised action plan.
+A Claude skill that acts as your senior Local SEO consultant. It combines three Google sources via Two Minute Reports — Google Business Profile (GMB), Search Console (GSC), and Analytics 4 (GA4) — into one unified audit that follows the local customer journey: get found → take an action → land on the site → convert. Delivered as an HTML report with a Local SEO health score and a prioritized action plan.
 
 ## Requirements & Setup
 
@@ -34,7 +34,7 @@ Claude will pull your live GMB, GSC, and GA4 data for the same business and prod
 | Organic Search (GSC) | Impressions, clicks, CTR, average position, plus top queries and pages |
 | Website & Conversion (GA4) | Sessions, engagement rate, key events, channel mix, and top landing pages |
 | Reviews (GMB) | Total review count and average star rating |
-| Prioritised Action Plan | Ranked fixes ordered by impact across the full found → action → site → convert journey |
+| Prioritized Action Plan | Ranked fixes ordered by impact across the full found → action → site → convert journey |
 
 ---
 

@@ -1,6 +1,6 @@
 # Reddit Ads Auditor — Claude Skill
 
-A Claude skill that acts as your senior Reddit Ads performance consultant. Connect it to your Reddit Ads account via Two Minute Reports and get a full audit across campaigns, ad groups, creatives, audiences, placements, devices, and budget allocation — delivered as an agency-grade HTML report with a health score and prioritised action plan.
+A Claude skill that acts as your senior Reddit Ads performance consultant. Connect it to your Reddit Ads account via Two Minute Reports and get a full audit across campaigns, ad groups, creatives, audiences, placements, devices, and budget allocation — delivered as an agency-grade HTML report with a health score and prioritized action plan.
 
 ## Requirements & Setup
 
@@ -39,7 +39,7 @@ Claude will pull your live Reddit Ads data and deliver the full audit automatica
 | Budget Allocation Audit      | Whether spend distribution matches your best-performing segments             |
 | Conversion Funnel Analysis   | Drop-off rates from click through to conversion across campaign types        |
 | Scaling Opportunities        | Campaigns and audiences with headroom to scale profitably                    |
-| Prioritised Action Plan      | Ranked fixes ordered by impact — the highest-leverage changes first          |
+| Prioritized Action Plan      | Ranked fixes ordered by impact — the highest-leverage changes first          |
 
 ---
 
