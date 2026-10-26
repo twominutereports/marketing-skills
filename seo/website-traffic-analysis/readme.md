@@ -20,7 +20,7 @@ A Claude skill that acts as your personal SEO specialist. Connect it to your web
 
 ## Usage
 
-Just say: `Analyse my website` or `Check my SEO`
+Just say: `Analyze my website` or `Check my SEO`
 
 Claude will pull your data and deliver the full analysis automatically — no setup questions.
 
@@ -36,7 +36,7 @@ Claude will pull your data and deliver the full analysis automatically — no se
 | Technical Health Check  | Indexing, crawl errors, mobile issues       |
 | Engagement Insights     | Bounce rate, time on page, device breakdown |
 | On-Page SEO Audit       | Title, meta, content quality fixes          |
-| 30-Day Action Plan      | Week-by-week prioritised tasks              |
+| 30-Day Action Plan      | Week-by-week prioritized tasks              |
 
 ---
 

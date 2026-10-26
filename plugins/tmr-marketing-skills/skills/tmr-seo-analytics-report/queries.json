@@ -1,5 +1,5 @@
 {
-  "notes": "Structured query templates for the SEO + Analytics Performance Report, migrated from the legacy generate_query/get_data_insights flow to the current TMR MCP. Two connectors: gsc (site URL account IDs) and ga4 (numeric property IDs). Field IDs are raw. Dates NOT stored — runtime resolves from today's date: 90-day window for Q1-Q4/Q6/Q7; the two most recent FULL calendar months for Q5 (GA4 MoM) and Q8a/Q8b (GSC page MoM). No currency (this report has no monetary metrics). AI-referrer filtering for Q7 is done in synthesis (pull all session sources, then keep chatgpt.com / gemini.google.com / claude.ai / perplexity.ai / copilot.com / notebooklm.google.com). All queries validated clean against live gsc + ga4 accounts. GSC data lags ~2-3 days.",
+  "notes": "Structured query templates for the SEO + Analytics Performance Report, migrated from the legacy generate_query/get_data_insights flow to the current TMR MCP. Two connectors: gsc (site URL account IDs) and ga4 (numeric property IDs). Field IDs are raw. Dates NOT stored — runtime resolves from today's date: 90-day window for Q1-Q4/Q6/Q7; the two most recent FULL calendar months for Q5 (GA4 MoM) and Q8a/Q8b (GSC page MoM). No currency (this report has no monetary metrics). AI-referrer filtering for Q7 happens in the query: session_source in the AI referrers, with totals: true, so the KPI cards come from the engine and the rows are the per-platform table. All queries validated clean against live gsc + ga4 accounts. GSC data lags ~2-3 days.",
   "connectors": {
     "gsc": {
       "connectorId": "gsc",
@@ -71,12 +71,16 @@
           "synthesis": "month-over-month per page; best = top 5 by session increase, worst = top 5 by decrease; exclude (not set)"
         },
         {
-          "key": "q7_ga4_session_source",
-          "title": "GA4 Session Source (90d)",
+          "key": "q7_ga4_ai_referrals",
+          "title": "GA4 AI Referrals (90d)",
           "dimensions": ["session_source"],
           "metrics": ["sessions", "total_users", "new_users", "bounce_rate", "key_events"],
+          "filters": [
+            {"filterField": "session_source", "operator": "in", "expression": "chatgpt.com,chat.openai.com,gemini.google.com,claude.ai,perplexity.ai,perplexity,copilot.microsoft.com,copilot.com,notebooklm.google.com"}
+          ],
+          "totals": true,
           "window": "last_90_days",
-          "synthesis": "filter to known AI referrers: chatgpt.com, gemini.google.com, claude.ai, perplexity.ai, copilot.com, notebooklm.google.com (allow /referral suffix). If none present, report AI traffic as zero."
+          "synthesis": "rows = per-platform breakdown; AI KPI cards = the result's totals, never a sum of rows (users are not additive). No rows: say no AI referrals were recorded."
         }
       ]
     }

@@ -23,7 +23,7 @@ Typical requests: "SEO performance report", "monthly SEO report for my site", "h
 This skill uses these TMR connectors:
 - Google Search Console (`gsc`): required
 - Google Analytics 4 (`ga4`): required
-- Page Speed Insights (`psi`): required. **The URL to test must come from the user on every run (or from their saved config). Never guess, infer or derive it from another connector.**
+- PageSpeed Insights (`psi`): required. **The URL to test must come from the user on every run (or from their saved config). Never guess, infer or derive it from another connector.**
 - Google My Business / Business Profile (`gmb`): **optional**. If the user has no enabled GMB account, run the other four tabs; the Business Profile tab then shows a "connect Google Business Profile" note.
 
 Pass `skillId: "tmr-multichannel-seo-performance-report"` on every `validate_query` and `run_query` call.
@@ -128,7 +128,7 @@ c. **Confirm.** Skip this if `auto_confirm_query` is `true`. Otherwise show a pl
 
 d. **Run.** `run_query(teamId, skillId, connectors: <core_connectors.json>, limit: 250)` and `run_query(teamId, skillId, connectors: <ai_connectors.json>, limit: 5000)`. These are independent, so run them in parallel.
 
-e. **Save the results to disk unchanged.** If a result comes back as a stored file path (large results do), copy that file to `./seo_run/core.json` or `./seo_run/ai.json`. If it comes back inline, write the exact JSON object (the one containing `connectorResults`) to those files. Do not hand-edit or summarise rows.
+e. **Save the results to disk unchanged.** If a result comes back as a stored file path (large results do), copy that file to `./seo_run/core.json` or `./seo_run/ai.json`. If it comes back inline, write the exact JSON object (the one containing `connectorResults`) to those files. Do not hand-edit or summarize rows.
 
 f. **Write meta.** Create `./seo_run/meta.json` with labels only, no IDs:
 
@@ -285,7 +285,7 @@ from urllib.parse import urlparse
 
 
 # ---------------------------------------------------------------- AI platforms
-# Order is fixed: it sets each platform's chart colour (colour follows the entity).
+# Order is fixed: it sets each platform's chart color (color follows the entity).
 AI_PLATFORMS = [
     {"id": "chatgpt", "name": "ChatGPT", "keys": ["chatgpt", "openai"]},
     {"id": "gemini", "name": "Gemini", "keys": ["gemini", "bard.google"]},

@@ -1,6 +1,6 @@
 # LinkedIn Ads Auditor — Claude Skill
 
-A Claude skill that acts as your senior LinkedIn Ads performance consultant. Connect it to your LinkedIn Ads account via Two Minute Reports and get a full B2B-focused audit across campaigns, creatives, audiences, and ad formats — delivered as a scored HTML report with a prioritised action plan tuned to B2B demand generation realities.
+A Claude skill that acts as your senior LinkedIn Ads performance consultant. Connect it to your LinkedIn Ads account via Two Minute Reports and get a full B2B-focused audit across campaigns, creatives, audiences, and ad formats — delivered as a scored HTML report with a prioritized action plan tuned to B2B demand generation realities.
 
 ## Requirements & Setup
 
@@ -33,7 +33,7 @@ Claude will pull your live LinkedIn Ads data and deliver the full audit automati
 | Campaign Performance Ranking | All campaigns ranked by CPL, ROAS, and conversion volume |
 | Creative Audit | Top and bottom creatives by CTR, conversion rate, and creative fatigue signals |
 | Audience & Budget Allocation | Whether spend is weighted toward your best-performing audience segments and formats |
-| Prioritised Action Plan | Ranked fixes ordered by impact — the highest-leverage changes first |
+| Prioritized Action Plan | Ranked fixes ordered by impact — the highest-leverage changes first |
 
 ---
 

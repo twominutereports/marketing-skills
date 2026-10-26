@@ -11,7 +11,7 @@ compatibility: "Requires the current Two Minute Reports MCP (server https://mcp.
 
 ## Purpose
 
-Detect content decay across your website by combining Google Search Console (GSC) and Google Analytics 4 (GA4) data. The skill compares the last 30 days against the prior 30-day period, identifies candidate pages with meaningful organic decline, scores each page by severity, diagnoses the root cause using a structured case-matching framework (visibility loss, SERP issue, tracking mismatch, or engagement decay), and surfaces a prioritised action list — inline in chat plus a full HTML dashboard.
+Detect content decay across your website by combining Google Search Console (GSC) and Google Analytics 4 (GA4) data. The skill compares the last 30 days against the prior 30-day period, identifies candidate pages with meaningful organic decline, scores each page by severity, diagnoses the root cause using a structured case-matching framework (visibility loss, SERP issue, tracking mismatch, or engagement decay), and surfaces a prioritized action list — inline in chat plus a full HTML dashboard.
 
 This is not a simple traffic comparison. The skill uses explicit decay logic: a page must fail a threshold test on clicks OR organic sessions to enter the candidate list, and root cause is inferred from the pattern of clicks vs impressions vs CTR vs sessions vs engagement — not from any single metric in isolation.
 
@@ -96,7 +96,7 @@ Try to read `<install-path>/config.json`.
 - Reuse the `get_connector_accounts` responses from step 3.
 - Present accounts grouped by connector. Ask:
 
-  > *"Which Google Search Console property and GA4 property would you like to analyse? Pick one each — ideally matching the same website."*
+  > *"Which Google Search Console property and GA4 property would you like to analyze? Pick one each — ideally matching the same website."*
 
   Wait for selection.
 
@@ -193,7 +193,7 @@ For Case C, explicitly flag this to the user in the insights and dashboard — i
 
 Write a 200–350 word insights summary in chat. Structure:
 
-1. **Headline** — total pages analysed, total candidates flagged, breakdown by severity tier.
+1. **Headline** — total pages analyzed, total candidates flagged, breakdown by severity tier.
 2. **Top 3 decaying pages** — URL (shortened), severity, decay score, root cause label, and the single most telling signal (e.g. "CTR fell [X%] while impressions held steady → Case B").
 3. **Pattern observation** — is there a dominant root cause across candidates? Any cluster (e.g. blog posts from a specific period, a URL pattern)?
 4. **Priority action** — one concrete next step based on the most severe case.
@@ -201,7 +201,7 @@ Write a 200–350 word insights summary in chat. Structure:
 Match the tone and structure of this template (fill `[brackets]` with the user's actual data):
 
 ---
-*[N] pages analysed across [property]. [N] decay candidates identified: [N] Critical, [N] High, [N] Medium.*
+*[N] pages analyzed across [property]. [N] decay candidates identified: [N] Critical, [N] High, [N] Medium.*
 
 *Top decliners this period:*
 *• [Page URL] — [Severity]. Decay score [X]. [Root cause label]. Key signal: [most telling metric change].*
@@ -222,10 +222,10 @@ Produce a **new artifact** for this run. Do not update or replace any prior run'
 
 The dashboard must include:
 
-**Metadata header** (top of page): Run date/time · GSC property · GA4 property · Comparison window · Total pages analysed
+**Metadata header** (top of page): Run date/time · GSC property · GA4 property · Comparison window · Total pages analyzed
 
 **KPI tile row** (4 tiles):
-- Pages Analysed
+- Pages Analyzed
 - Decay Candidates
 - Critical Pages
 - Dominant Root Cause
@@ -233,7 +233,7 @@ The dashboard must include:
 **Decay Candidate Table** — one row per candidate page, columns:
 | Page URL | Severity | Decay Score | Click Δ% | Session Δ% | Impression Δ% | Position Δ | CTR Δ% | Engaged Session Δ% | Key Events Δ% | Root Cause | Likely Cause |
 
-- Severity tiers use colour coding: Critical = red (#EF4444), High = orange (#F97316), Medium = amber (#F59E0B).
+- Severity tiers use color coding: Critical = red (#EF4444), High = orange (#F97316), Medium = amber (#F59E0B).
 - Root cause labels display as a pill/badge.
 - Sort: Critical → High → Medium, then by Decay Score descending within each tier.
 - Rows with Case C (Tracking Mismatch) display a ⚠️ icon and a tooltip: *"Clicks are stable in GSC but sessions dropped in GA4 — investigate tracking before taking content action."*
@@ -242,15 +242,15 @@ The dashboard must include:
 
 **Recommended Actions panel** — for the top 3 Critical/High pages, show a one-line recommended action based on the diagnosed root cause.
 
-Use this colour palette and typography:
+Use this color palette and typography:
 - Background: `#0F172A` (dark navy)
 - Card/tile background: `#1E293B`
 - Primary accent: `#6366F1` (indigo)
 - Text primary: `#F1F5F9`
 - Text muted: `#94A3B8`
 - Font: Inter or system-ui
-- Severity colours: Critical `#EF4444`, High `#F97316`, Medium `#F59E0B`
-- Root cause pill colours: Case A `#3B82F6`, Case B `#8B5CF6`, Case C `#EAB308`, Case D `#10B981`, Case E `#6B7280`
+- Severity colors: Critical `#EF4444`, High `#F97316`, Medium `#F59E0B`
+- Root cause pill colors: Case A `#3B82F6`, Case B `#8B5CF6`, Case C `#EAB308`, Case D `#10B981`, Case E `#6B7280`
 
 ---
 

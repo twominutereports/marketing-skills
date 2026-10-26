@@ -1,6 +1,6 @@
 # Facebook Insights Reporter — Claude Skill
 
-A Claude skill that acts as your senior organic social-media strategist. Connect it to your Facebook Page via Two Minute Reports and get a full organic performance report across Page growth, reach, engagement, posts, and videos/Reels — delivered as a rich HTML report with visual scorecards, a growth trend chart, and a prioritised action plan. (For paid Facebook/Meta ad campaigns, use the Meta Ads Auditor instead.)
+A Claude skill that acts as your senior organic social-media strategist. Connect it to your Facebook Page via Two Minute Reports and get a full organic performance report across Page growth, reach, engagement, posts, and videos/Reels — delivered as a rich HTML report with visual scorecards, a growth trend chart, and a prioritized action plan. (For paid Facebook/Meta ad campaigns, use the Meta Ads Auditor instead.)
 
 ## Requirements & Setup
 
@@ -34,7 +34,7 @@ Claude will pull your live Facebook Page Insights data and deliver the full repo
 | Post Performance | Top posts ranked by reactions, with shares, comments, clicks, and format breakdown |
 | Video / Reels Performance | Video views, completion, Reels plays, shares, comments, and average watch time |
 | Audience Breakdown | Top countries and cities by organic impressions (current snapshot) |
-| Prioritised Action Plan | Ranked, tiered next steps ordered by impact — the highest-leverage changes first |
+| Prioritized Action Plan | Ranked, tiered next steps ordered by impact — the highest-leverage changes first |
 
 ---
 

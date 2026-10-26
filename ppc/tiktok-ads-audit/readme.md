@@ -1,6 +1,6 @@
 # TikTok Ads Auditor — Claude Skill
 
-A Claude skill that acts as your senior TikTok Ads performance consultant. Connect it to your TikTok Ads account via Two Minute Reports and get a full audit across campaigns, ad groups, creatives, and audiences — including creative fatigue signals — delivered as a scored HTML report with a prioritised action plan.
+A Claude skill that acts as your senior TikTok Ads performance consultant. Connect it to your TikTok Ads account via Two Minute Reports and get a full audit across campaigns, ad groups, creatives, and audiences — including creative fatigue signals — delivered as a scored HTML report with a prioritized action plan.
 
 ## Requirements & Setup
 
@@ -33,7 +33,7 @@ Claude will pull your live TikTok Ads data and deliver the full audit automatica
 | Campaign Performance Ranking | All campaigns ranked by ROAS, CPA, and conversion volume |
 | Creative Audit | Top and bottom creatives by CTR, conversion rate, and creative fatigue signals |
 | Audience & Budget Allocation | Whether spend is weighted toward your best-performing audiences and segments |
-| Prioritised Action Plan | Ranked fixes ordered by impact — the highest-leverage changes first |
+| Prioritized Action Plan | Ranked fixes ordered by impact — the highest-leverage changes first |
 
 ---
 

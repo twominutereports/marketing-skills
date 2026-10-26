@@ -129,9 +129,9 @@ e. Hold all returned data for synthesis in step 6.
 - **Q2 — GA4 totals (90d):** dims none · metrics `sessions`, `total_users`, `key_events`, `bounce_rate`
 - **Q4 — GA4 landing pages (90d):** dims `landing_page` · metrics `sessions`, `key_events` (take top 5 by sessions and top 5 by key events in synthesis)
 - **Q5 — GA4 landing page × month (last 2 full months):** dims `landing_page`, `month_name` · metrics `sessions`
-- **Q7 — GA4 session source (90d):** dims `session_source` · metrics `sessions`, `total_users`, `new_users`, `bounce_rate`, `key_events`
+- **Q7 — GA4 AI referrals (90d):** dims `session_source` · metrics `sessions`, `total_users`, `new_users`, `bounce_rate`, `key_events` · filter `session_source` `in` the AI referrers below · `totals: true` on the query item, beside its `title`
 
-> **AI-referrer handling (Q7):** Pull ALL session sources, then **filter to known AI referrers during synthesis** — `chatgpt.com`, `gemini.google.com`, `claude.ai`, `perplexity.ai`, `copilot.com`, `notebooklm.google.com` (match on the source string, allowing for `/referral` suffixes). This avoids connector-side filter syntax and is robust. If none of these sources appear, report AI traffic as zero/none rather than omitting the section.
+> **AI-referrer handling (Q7):** Filter on the server, not during synthesis: `{"filterField": "session_source", "operator": "in", "expression": "chatgpt.com,chat.openai.com,gemini.google.com,claude.ai,perplexity.ai,perplexity,copilot.microsoft.com,copilot.com,notebooklm.google.com"}`. The rows are the per-platform breakdown (`{{AI_SOURCE_ROWS}}`). The AI KPI cards (`{{AI_TOTAL_SESSIONS}}`, `{{AI_TOTAL_USERS}}`, `{{AI_NEW_USERS}}`, `{{AI_KEY_EVENTS}}`) come from the result's `totals`, never from adding up the rows: a person who arrives from two AI platforms is one user, so the rows overcount users. If Q7 returns no rows, say no AI referrals were recorded in the window rather than omitting the section.
 
 > **Keyword deduplication rule (apply during synthesis in step 6):** The Page dimension acts as a proxy for the primary keyword for that page. One page = one keyword slot. Sort all pages by total impressions descending across both periods (Q8a + Q8b). Derive each page's keyword from its URL path (last meaningful slug segment, hyphens → spaces). If two pages map to the same readable keyword, keep the one with higher impressions and skip the other. This ensures each keyword in the Best/Worst tables represents a distinct page and topic.
 
@@ -147,7 +147,7 @@ Write a 150–300 word insights summary inline in chat. Structure:
 
 1. **Headline finding** — what's the single most important thing the user should know about their organic performance?
 2. **Search visibility** — key GSC numbers (impressions, clicks, CTR, avg position) and what they indicate.
-3. **On-site behaviour** — GA4 sessions, users, key events, bounce rate and what they mean together.
+3. **On-site behavior** — GA4 sessions, users, key events, bounce rate and what they mean together.
 4. **Top pages** — which pages are driving the most value (clicks, sessions, conversions)?
 5. **MoM shifts** — which landing pages are growing or declining, and by how much?
 6. **AI traffic** — which AI platform is sending the most traffic, and is it converting?
@@ -157,7 +157,7 @@ Match the tone, voice, structure, and rhythm of this sanitized template. Replace
 
 ---
 
-*Organic performance over the last [reporting period] shows [X] impressions and [N] clicks from Google Search Console, at an average CTR of [Y%] and average position [P]. [Positive/negative framing based on benchmarks — e.g. "CTR is below the [X%] threshold typical for position [P], suggesting title and meta description optimisation could unlock meaningful click gains."].*
+*Organic performance over the last [reporting period] shows [X] impressions and [N] clicks from Google Search Console, at an average CTR of [Y%] and average position [P]. [Positive/negative framing based on benchmarks — e.g. "CTR is below the [X%] threshold typical for position [P], suggesting title and meta description optimization could unlock meaningful click gains."].*
 
 *On-site, GA4 recorded [N] sessions and [N] total users, with [N] key events and a [Y%] bounce rate. [Interpretation — e.g. "Bounce rate is [above/below] the [X%] benchmark for organic traffic, indicating [strong/weak] content-to-intent match."].*
 
@@ -167,7 +167,7 @@ Match the tone, voice, structure, and rhythm of this sanitized template. Replace
 
 *AI referrals totalled [N] sessions across [N] platforms. [Top AI source] led with [N] sessions and [N] key events — [interpretation, e.g. "the highest conversion rate among AI sources, suggesting strong brand-content alignment with that platform's audience"]. Overall AI traffic is [growing/steady/small] as a share of organic.*
 
-*Recommended action: [one specific, actionable next step based on the data — e.g. "Prioritise improving the meta title for [top impression page] — it has [N] impressions but only [Y%] CTR, meaning small copy improvements could drive significant click volume without any ranking work."].*
+*Recommended action: [one specific, actionable next step based on the data — e.g. "Prioritize improving the meta title for [top impression page] — it has [N] impressions but only [Y%] CTR, meaning small copy improvements could drive significant click volume without any ranking work."].*
 
 ---
 

@@ -1,6 +1,6 @@
 # Instagram Insights Reporter — Claude Skill
 
-A Claude skill that acts as your senior organic social-media strategist. Connect it to your Instagram account via Two Minute Reports and get a full organic performance report across account growth, reach, engagement, posts, Reels, and audience — delivered as a rich HTML report with visual scorecards, a growth trend chart, and a prioritised action plan.
+A Claude skill that acts as your senior organic social-media strategist. Connect it to your Instagram account via Two Minute Reports and get a full organic performance report across account growth, reach, engagement, posts, Reels, and audience — delivered as a rich HTML report with visual scorecards, a growth trend chart, and a prioritized action plan.
 
 ## Requirements & Setup
 
@@ -34,7 +34,7 @@ Claude will pull your live Instagram Insights data and deliver the full report a
 | Post / Media Performance | Top posts ranked by engagement, with reach, views, and format breakdown |
 | Reels Performance | Reels interactions, shares, views, and reach vs feed performance |
 | Audience Breakdown | Follower age, gender, and top countries (current snapshot) |
-| Prioritised Action Plan | Ranked, tiered next steps ordered by impact — the highest-leverage changes first |
+| Prioritized Action Plan | Ranked, tiered next steps ordered by impact — the highest-leverage changes first |
 
 ---
 

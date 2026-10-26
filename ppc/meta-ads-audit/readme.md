@@ -1,6 +1,6 @@
 # Meta Ads Auditor — Claude Skill
 
-A Claude skill that acts as your senior Meta Ads performance consultant. Connect it to your Facebook Ads account via Two Minute Reports and get a full audit across campaigns, ad sets, creatives, audiences, and placements — including creative fatigue signals — delivered as a scored HTML report with a prioritised action plan.
+A Claude skill that acts as your senior Meta Ads performance consultant. Connect it to your Facebook Ads account via Two Minute Reports and get a full audit across campaigns, ad sets, creatives, audiences, and placements — including creative fatigue signals — delivered as a scored HTML report with a prioritized action plan.
 
 ## Requirements & Setup
 
@@ -36,7 +36,7 @@ Claude will pull your live Meta Ads data and deliver the full audit automaticall
 | Creative Fatigue Detection   | Creatives with declining frequency-adjusted performance and suggested rotation timing   |
 | Audience Performance Audit   | Breakdown of performance by audience type — retargeting, lookalike, interest, and broad |
 | Placement Performance Audit  | Feed vs Reels vs Stories vs Audience Network — where your spend is working hardest      |
-| Prioritised Action Plan      | Ranked fixes ordered by impact — the highest-leverage changes first                     |
+| Prioritized Action Plan      | Ranked fixes ordered by impact — the highest-leverage changes first                     |
 
 ---
 
