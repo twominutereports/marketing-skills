@@ -71,12 +71,16 @@
           "synthesis": "month-over-month per page; best = top 5 by session increase, worst = top 5 by decrease; exclude (not set)"
         },
         {
-          "key": "q7_ga4_session_source",
-          "title": "GA4 Session Source (90d)",
+          "key": "q7_ga4_ai_referrals",
+          "title": "GA4 AI Referrals (90d)",
           "dimensions": ["session_source"],
           "metrics": ["sessions", "total_users", "new_users", "bounce_rate", "key_events"],
+          "filters": [
+            {"filterField": "session_source", "operator": "in", "expression": "chatgpt.com,chat.openai.com,gemini.google.com,claude.ai,perplexity.ai,perplexity,copilot.microsoft.com,copilot.com,notebooklm.google.com"}
+          ],
+          "totals": true,
           "window": "last_90_days",
-          "synthesis": "filter to known AI referrers: chatgpt.com, gemini.google.com, claude.ai, perplexity.ai, copilot.com, notebooklm.google.com (allow /referral suffix). If none present, report AI traffic as zero."
+          "synthesis": "rows = per-platform breakdown; AI KPI cards = the result's totals, never a sum of rows (users are not additive). No rows: say no AI referrals were recorded."
         }
       ]
     }
