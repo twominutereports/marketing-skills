@@ -20,7 +20,7 @@ User settings are saved outside the skill, at `~/.tmr-skills/tmr-multichannel-se
 |---|---|---|---|
 | Google Search Console | `gsc` | Yes | Analytics report mode; the window ends 3 days back because of GSC data lag |
 | Google Analytics 4 | `ga4` | Yes | Also powers the AI Traffic section |
-| Page Speed Insights | `psi` | Yes | The URL to test is always asked from the user (or read from saved config) and never inferred |
+| PageSpeed Insights | `psi` | Yes | The URL to test is always asked from the user (or read from saved config) and never inferred |
 | Google My Business | `gmb` | Optional | If no location is connected, the Business Profile tab shows a setup note |
 
 ## Dashboard tabs
